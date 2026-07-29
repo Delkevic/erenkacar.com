@@ -183,6 +183,34 @@ test("the GuitarSense image registry references real accessible screenshot asset
   }
 });
 
+test("the production GuitarSense Library asset has matching PNG dimensions", () => {
+  const imagePath = "public/images/projects/guitarsense/library.png";
+  const registry = read("src/data/guitarsense-images.ts");
+  const homepage = read("src/components/sections/featured-project.tsx");
+  const library = registryEntry(registry, "library");
+
+  assert.ok(existsSync(imagePath), "The clean Library image should exist");
+
+  const image = readFileSync(imagePath);
+  const pngSignature = image.subarray(0, 8).toString("hex");
+  const width = image.readUInt32BE(16);
+  const height = image.readUInt32BE(20);
+
+  assert.equal(pngSignature, "89504e470d0a1a0a");
+  assert.equal(width, 1876);
+  assert.equal(height, 952);
+  assert.match(
+    library,
+    /src:\s*"\/images\/projects\/guitarsense\/library\.png"/,
+  );
+  assert.match(library, /width:\s*1876/);
+  assert.match(library, /height:\s*952/);
+  assert.match(library, /placement:\s*"homepage"/);
+  assert.match(library, /frame:\s*"contain"/);
+  assert.match(library, /replaceBeforeLaunch:\s*false/);
+  assert.match(homepage, /image=\{guitarSenseImages\.library\}/);
+});
+
 test("GuitarSense screenshot mappings and launch readiness stay explicit", () => {
   const registry = read("src/data/guitarsense-images.ts");
   const homepage = read("src/components/sections/featured-project.tsx");

@@ -29,13 +29,30 @@ test("the Nexora homepage card uses its real feed image and detail route", () =>
   const projectCard = read("src/components/ui/project-card.tsx");
   const registry = read("src/data/nexora-images.ts");
   const nexora = objectBetween(projects, 'name: "Nexora"', 'name: "Grade Watcher"');
+  const imagePath = "public/images/projects/nexora/ana-ekran.png";
 
   assert.match(nexora, /href:\s*"\/projects\/nexora"/);
   assert.match(nexora, /image:\s*nexoraImages\.homeFeed/);
   const homeFeed = registryEntry(registry, "homeFeed");
 
-  assert.match(homeFeed, /src:\s*"\/images\/projects\/nexora\/ana-ekran\.jpg"/);
+  assert.ok(existsSync(imagePath), "The clean Nexora homepage image should exist");
+
+  const image = readFileSync(imagePath);
+  const pngSignature = image.subarray(0, 8).toString("hex");
+  const width = image.readUInt32BE(16);
+  const height = image.readUInt32BE(20);
+
+  assert.equal(pngSignature, "89504e470d0a1a0a");
+  assert.equal(width, 1881);
+  assert.equal(height, 856);
+  assert.match(homeFeed, /src:\s*"\/images\/projects\/nexora\/ana-ekran\.png"/);
+  assert.match(homeFeed, /width:\s*1881/);
+  assert.match(homeFeed, /height:\s*856/);
   assert.match(homeFeed, /frame:\s*"contain"/);
+  assert.match(homeFeed, /placement:\s*"homepage"/);
+  assert.match(homeFeed, /replaceBeforeLaunch:\s*false/);
+  assert.match(homeFeed, /replacementReason:\s*null/);
+  assert.doesNotMatch(registry, /ana-ekran\.jpg/);
   assert.match(projectCard, /<ScreenshotFigure/);
   assert.match(projectCard, /View project/);
   assert.match(projectCard, /from "next\/link"/);
@@ -111,12 +128,10 @@ test("the Nexora case study renders three distinct reviewed screenshots", () => 
   }
 });
 
-test("Nexora temporary screenshots have private launch-readiness reasons", () => {
+test("Nexora screenshot launch readiness distinguishes production authentication", () => {
   const registry = read("src/data/nexora-images.ts");
   const expectedReasons = new Map([
-    ["homeFeed", "Contains third-party artwork or media used as test content."],
     ["explore", "Contains third-party artwork or media used as test content."],
-    ["authentication", "Contains an intentionally unrealistic test email address."],
     ["messaging", "Contains identifiable test-user names or profile imagery."],
   ]);
 
@@ -125,6 +140,13 @@ test("Nexora temporary screenshots have private launch-readiness reasons", () =>
 
     assert.match(entry, /replaceBeforeLaunch:\s*true/);
     assert.match(entry, new RegExp(reason.replaceAll(".", "\\.")));
+  }
+
+  for (const image of ["homeFeed", "authentication"]) {
+    const entry = registryEntry(registry, image);
+
+    assert.match(entry, /replaceBeforeLaunch:\s*false/);
+    assert.match(entry, /replacementReason:\s*null/);
   }
 
   const publicSource = [
@@ -138,11 +160,37 @@ test("Nexora temporary screenshots have private launch-readiness reasons", () =>
   );
 });
 
-test("the internal checklist records only private Nexora screenshot cleanup", () => {
+test("the production authentication image exists with matching PNG dimensions", () => {
+  const imagePath = "public/images/projects/nexora/2fa.png";
+  const registry = read("src/data/nexora-images.ts");
+  const authentication = registryEntry(registry, "authentication");
+
+  assert.ok(existsSync(imagePath), "The clean authentication image should exist");
+
+  const image = readFileSync(imagePath);
+  const pngSignature = image.subarray(0, 8).toString("hex");
+  const width = image.readUInt32BE(16);
+  const height = image.readUInt32BE(20);
+
+  assert.equal(pngSignature, "89504e470d0a1a0a");
+  assert.equal(width, 1333);
+  assert.equal(height, 769);
+  assert.match(
+    authentication,
+    /src:\s*"\/images\/projects\/nexora\/2fa\.png"/,
+  );
+  assert.match(authentication, /width:\s*1333/);
+  assert.match(authentication, /height:\s*769/);
+});
+
+test("the internal checklist records only remaining Nexora screenshot cleanup", () => {
   const readme = read("README.md");
 
   assert.match(readme, /Nexora screenshot replacements before public launch/);
-  assert.match(readme, /home feed and Explore/i);
-  assert.match(readme, /unrealistic test email/i);
+  assert.match(readme, /Explore/i);
   assert.match(readme, /test-user names or profile imagery/i);
+  assert.doesNotMatch(
+    readme,
+    /home feed|authentication|unrealistic test email/i,
+  );
 });

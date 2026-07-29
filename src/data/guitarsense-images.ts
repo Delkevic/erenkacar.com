@@ -12,8 +12,8 @@ export type GuitarSenseImage = {
 export const guitarSenseImages = {
   library: {
     src: "/images/projects/guitarsense/library.png",
-    width: 1908,
-    height: 955,
+    width: 1876,
+    height: 952,
     alt: "GuitarSense project library showing saved practice projects and readiness states",
     caption: null,
     placement: "homepage",
