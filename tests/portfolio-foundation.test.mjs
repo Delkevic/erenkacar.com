@@ -97,7 +97,7 @@ test("reviewed project data describes GuitarSense, Nexora, and Grade Watcher", (
   assert.match(projects, /A desktop guitar practice platform combining/);
   assert.match(projects, /TÜBİTAK 2209-A supported/);
   assert.match(projects, /name:\s*"Nexora"/);
-  assert.match(projects, /secure authentication, two-factor verification/);
+  assert.match(projects, /secure account flows, Firebase realtime messaging/);
   assert.match(projects, /name:\s*"Grade Watcher"/);
   assert.match(projects, /monitors academic result changes/);
   assert.doesNotMatch(projects, /needsReview/);

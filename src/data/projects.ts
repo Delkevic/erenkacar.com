@@ -1,4 +1,5 @@
 import type { OtherWorkItem, Project } from "@/types/content";
+import { nexoraImages } from "@/data/nexora-images";
 
 export const projects: Project[] = [
   {
@@ -19,15 +20,16 @@ export const projects: Project[] = [
     name: "Nexora",
     eyebrow: "Full-stack social platform",
     summary:
-      "A full-stack social platform with secure authentication, two-factor verification, real-time messaging, personalized content discovery and AI-assisted content tagging.",
-    tags: ["React", "Go", "Gin", "MySQL", "WebSocket", "Gemini API"],
+      "A full-stack social platform with secure account flows, Firebase realtime messaging, social discovery and AI-assisted content analysis.",
+    tags: ["React", "Go", "Gin", "MySQL", "Firebase", "Gemini API"],
     proofPoints: [
-      "Real-time messaging",
-      "Two-factor authentication",
-      "Personalized feed and discovery",
+      "Secure account flows",
+      "Firebase realtime messaging",
+      "AI-assisted content analysis and discovery",
     ],
-    href: null,
+    href: "/projects/nexora",
     featured: false,
+    image: nexoraImages.homeFeed,
   },
   {
     name: "Grade Watcher",

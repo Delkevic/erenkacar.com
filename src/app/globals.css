@@ -464,6 +464,18 @@ a {
   font-size: 0.72rem;
 }
 
+.project-card--with-image .project-card__index {
+  margin-bottom: 1.25rem;
+}
+
+.project-card__visual {
+  margin-bottom: 1.5rem;
+}
+
+.project-card__visual .screenshot-frame {
+  border-radius: var(--radius-md);
+}
+
 .project-card .project-kicker {
   margin-bottom: 0.7rem;
   color: var(--color-accent-strong);
@@ -481,6 +493,10 @@ a {
   max-width: 34rem;
   margin: 1rem 0 0;
   color: var(--color-text-muted);
+}
+
+.project-card__link {
+  margin-top: 1.5rem;
 }
 
 .timeline {
@@ -734,6 +750,10 @@ a {
   aspect-ratio: 19 / 10;
 }
 
+.nexora-primary-visual .screenshot-frame {
+  background: #020706;
+}
+
 .case-sections {
   margin: 0;
   padding: 0;
@@ -900,6 +920,70 @@ a {
 .challenge-evidence__figure {
   width: min(100%, 42rem);
   margin-inline: auto;
+}
+
+.nexora-architecture {
+  display: grid;
+  gap: 1rem;
+}
+
+.nexora-architecture__core {
+  display: grid;
+  grid-template-columns: repeat(3, minmax(0, 1fr));
+  gap: 0.75rem;
+  margin: 0;
+  padding: 0;
+  list-style: none;
+}
+
+.nexora-architecture__core li {
+  display: flex;
+  align-items: center;
+  gap: 0.75rem;
+  min-width: 0;
+}
+
+.nexora-architecture__core li > span:first-child {
+  display: grid;
+  min-height: 4.5rem;
+  flex: 1;
+  place-items: center;
+  border: 1px solid var(--color-border);
+  border-radius: var(--radius-md);
+  background: var(--color-surface);
+  padding: 0.9rem;
+  font-family: var(--font-mono);
+  font-size: 0.76rem;
+  font-weight: 700;
+  text-align: center;
+}
+
+.nexora-architecture__core li > span[aria-hidden="true"] {
+  color: var(--color-accent);
+  font-family: var(--font-mono);
+}
+
+.nexora-architecture__services {
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  gap: 0.75rem;
+}
+
+.nexora-architecture__services article {
+  border: 1px solid var(--color-border);
+  border-radius: var(--radius-md);
+  padding: 1rem;
+}
+
+.nexora-architecture__services h3 {
+  margin: 0 0 0.35rem;
+  color: var(--color-accent-strong);
+  font-family: var(--font-mono);
+  font-size: 0.76rem;
+}
+
+.case-section .nexora-architecture__services p {
+  font-size: 0.9rem;
 }
 
 .feature-card,
@@ -1095,6 +1179,24 @@ a {
 
   .architecture__runtimes ul {
     grid-template-columns: 1fr;
+  }
+
+  .nexora-architecture__core,
+  .nexora-architecture__services {
+    grid-template-columns: 1fr;
+  }
+
+  .nexora-architecture__core li {
+    flex-direction: column;
+  }
+
+  .nexora-architecture__core li > span:first-child {
+    width: 100%;
+    min-height: auto;
+  }
+
+  .nexora-architecture__core li > span[aria-hidden="true"] {
+    transform: rotate(90deg);
   }
 
   .site-footer__inner {

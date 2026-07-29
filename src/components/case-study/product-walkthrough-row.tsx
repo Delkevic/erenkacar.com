@@ -1,10 +1,10 @@
 import { ScreenshotFigure } from "@/components/ui/screenshot-figure";
-import type { GuitarSenseImage } from "@/data/guitarsense-images";
+import type { ScreenshotImage } from "@/types/screenshot";
 
 type ProductWalkthroughRowProps = {
   heading: string;
   text: string;
-  image: GuitarSenseImage;
+  image: ScreenshotImage;
   imagePosition: "left" | "right";
 };
 

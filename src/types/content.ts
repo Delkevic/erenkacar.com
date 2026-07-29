@@ -1,3 +1,5 @@
+import type { ScreenshotImage } from "@/types/screenshot";
+
 export type Project = {
   name: string;
   eyebrow: string;
@@ -6,6 +8,7 @@ export type Project = {
   proofPoints: string[];
   href: string | null;
   featured: boolean;
+  image?: ScreenshotImage;
 };
 
 export type ExperienceEntry = {

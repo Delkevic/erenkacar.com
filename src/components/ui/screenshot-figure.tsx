@@ -1,8 +1,8 @@
 import Image from "next/image";
-import type { GuitarSenseImage } from "@/data/guitarsense-images";
+import type { ScreenshotImage } from "@/types/screenshot";
 
 type ScreenshotFigureProps = {
-  image: GuitarSenseImage;
+  image: ScreenshotImage;
   sizes: string;
   className?: string;
   eager?: boolean;
