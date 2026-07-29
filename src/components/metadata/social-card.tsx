@@ -1,4 +1,5 @@
 import { ImageResponse } from "next/og";
+import { siteConfig } from "@/config/site";
 
 export const socialImageSize = {
   width: 1200,
@@ -158,7 +159,7 @@ export function createSocialImage({
             fontSize: 20,
           }}
         >
-          <span>erenkacar.com</span>
+          <span>{siteConfig.displayDomain}</span>
           <span>Desktop · Web · Real-time systems</span>
         </div>
       </div>

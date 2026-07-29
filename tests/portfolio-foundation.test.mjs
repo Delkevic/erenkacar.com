@@ -83,7 +83,8 @@ test("the homepage exposes every navigation section target", () => {
 test("site configuration centralizes verified public destinations", () => {
   const config = read("src/config/site.ts");
 
-  assert.match(config, /domain:\s*"https:\/\/erenkacar\.com"/);
+  assert.match(config, /siteUrl:\s*"https:\/\/www\.erenkacar\.com"/);
+  assert.match(config, /displayDomain:\s*"erenkacar\.com"/);
   assert.match(config, /githubUrl:\s*"https:\/\/github\.com\/Delkevic"/);
   assert.match(
     config,

@@ -10,7 +10,7 @@ const routes = [
 
 export default function sitemap(): MetadataRoute.Sitemap {
   return routes.map((route) => ({
-    url: new URL(route, siteConfig.domain).toString(),
+    url: new URL(route, siteConfig.siteUrl).toString(),
     changeFrequency: route === "/" ? "monthly" : "yearly",
     priority: route === "/" ? 1 : 0.7,
   }));

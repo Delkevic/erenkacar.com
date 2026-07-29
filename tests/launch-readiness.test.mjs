@@ -29,12 +29,15 @@ test("root metadata defines the reviewed production identity and sharing default
   const layout = read("src/app/layout.tsx");
   const config = read("src/config/site.ts");
 
-  assert.match(config, /domain:\s*"https:\/\/erenkacar\.com"/);
+  assert.match(config, /siteUrl:\s*"https:\/\/www\.erenkacar\.com"/);
+  assert.match(config, /displayDomain:\s*"erenkacar\.com"/);
+  assert.doesNotMatch(config, /domain:\s*"https:\/\/erenkacar\.com"/);
   assert.match(
     config,
     /Software engineer building end-to-end desktop, web and real-time products, with work spanning product architecture, automation, audio systems, performance and security\./,
   );
-  assert.match(layout, /metadataBase:\s*new URL\(siteConfig\.domain\)/);
+  assert.match(layout, /metadataBase:\s*new URL\(siteConfig\.siteUrl\)/);
+  assert.match(layout, /url:\s*siteConfig\.siteUrl/);
   assert.match(layout, /default:\s*"Eren Kaçar — Software Engineer"/);
   assert.match(layout, /template:\s*"%s — Eren Kaçar"/);
   assert.match(layout, /authors:\s*\[\{\s*name:\s*siteConfig\.name/);
@@ -84,6 +87,7 @@ test("homepage renders safe Person and WebSite JSON-LD from centralized config",
   assert.match(home, /email:\s*siteConfig\.contactUrl/);
   assert.match(home, /siteConfig\.githubUrl/);
   assert.match(home, /siteConfig\.linkedinUrl/);
+  assert.equal(home.match(/url:\s*siteConfig\.siteUrl/g)?.length, 2);
   assert.match(home, /name:\s*"Trakya University"/);
   assert.match(home, /\.replace\(\/<\/g,\s*"\\\\u003c"\)/);
   assert.doesNotMatch(home, /SearchAction|telephone|address|salary/);
@@ -113,6 +117,8 @@ test("App Router icon and social image conventions cover the site and projects",
   assert.match(socialCard, /width:\s*1200/);
   assert.match(socialCard, /height:\s*630/);
   assert.match(socialCard, /Desktop · Web · Real-time systems/);
+  assert.match(socialCard, /\{siteConfig\.displayDomain\}/);
+  assert.doesNotMatch(socialCard, />www\.erenkacar\.com</);
   assert.match(rootSocial, /Eren Kaçar/);
   assert.match(rootSocial, /Software Engineer/);
 
@@ -156,10 +162,10 @@ test("sitemap, robots, and manifest expose only the intended production surface"
     "/projects/nexora",
     "/projects/grade-watcher",
   ]);
-  assert.match(sitemap, /siteConfig\.domain/);
+  assert.match(sitemap, /siteConfig\.siteUrl/);
   assert.doesNotMatch(sitemap, /resume|images|lastModified/);
   assert.match(robots, /allow:\s*"\/"/);
-  assert.match(robots, /`\$\{siteConfig\.domain\}\/sitemap\.xml`/);
+  assert.match(robots, /`\$\{siteConfig\.siteUrl\}\/sitemap\.xml`/);
   assert.match(manifest, /name:\s*"Eren Kaçar — Software Engineer"/);
   assert.match(manifest, /short_name:\s*siteConfig\.name/);
   assert.match(manifest, /background_color:\s*"#0a1017"/);

@@ -3,14 +3,14 @@ import { siteConfig } from "@/config/site";
 import "./globals.css";
 
 export const metadata: Metadata = {
-  metadataBase: new URL(siteConfig.domain),
+  metadataBase: new URL(siteConfig.siteUrl),
   title: {
     default: "Eren Kaçar — Software Engineer",
     template: "%s — Eren Kaçar",
   },
   description: siteConfig.description,
   applicationName: siteConfig.name,
-  authors: [{ name: siteConfig.name, url: siteConfig.domain }],
+  authors: [{ name: siteConfig.name, url: siteConfig.siteUrl }],
   creator: siteConfig.name,
   category: "technology",
   alternates: {
@@ -19,7 +19,7 @@ export const metadata: Metadata = {
   openGraph: {
     type: "website",
     locale: "en_US",
-    url: siteConfig.domain,
+    url: siteConfig.siteUrl,
     siteName: siteConfig.name,
     title: "Eren Kaçar — Software Engineer",
     description: siteConfig.description,

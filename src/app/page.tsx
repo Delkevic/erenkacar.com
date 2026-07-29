@@ -17,7 +17,7 @@ export default function Home() {
       {
         "@type": "Person",
         name: siteConfig.name,
-        url: siteConfig.domain,
+        url: siteConfig.siteUrl,
         jobTitle: "Software Engineer",
         email: siteConfig.contactUrl,
         sameAs: [siteConfig.githubUrl, siteConfig.linkedinUrl],
@@ -29,7 +29,7 @@ export default function Home() {
       {
         "@type": "WebSite",
         name: siteConfig.name,
-        url: siteConfig.domain,
+        url: siteConfig.siteUrl,
         inLanguage: "en",
       },
     ],
