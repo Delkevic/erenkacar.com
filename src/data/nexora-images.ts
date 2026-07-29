@@ -19,17 +19,16 @@ export const nexoraImages = {
     replacementReason: null,
   },
   explore: {
-    src: "/images/projects/nexora/feed.jpg",
-    width: 1280,
-    height: 604,
+    src: "/images/projects/nexora/feed.png",
+    width: 1882,
+    height: 848,
     alt: "Nexora Explore interface with filters, popular tags and content grid",
     caption:
       "Filters and popular tags provide multiple entry points into content browsing.",
     placement: "case-primary",
     frame: "natural",
-    replaceBeforeLaunch: true,
-    replacementReason:
-      "Contains third-party artwork or media used as test content.",
+    replaceBeforeLaunch: false,
+    replacementReason: null,
   },
   authentication: {
     src: "/images/projects/nexora/2fa.png",
@@ -43,16 +42,15 @@ export const nexoraImages = {
     replacementReason: null,
   },
   messaging: {
-    src: "/images/projects/nexora/mesaj.jpg",
-    width: 1280,
-    height: 700,
-    alt: "Nexora messaging interface with conversation list and direct messages",
+    src: "/images/projects/nexora/messaging.png",
+    width: 1262,
+    height: 855,
+    alt: "Nexora direct-message interface showing an online demo conversation and realtime message updates",
     caption:
-      "Conversation navigation, presence and direct messages share one focused workspace.",
+      "Firebase-backed direct messaging with presence, delivery state and realtime conversation updates.",
     placement: "walkthrough",
     frame: "natural",
-    replaceBeforeLaunch: true,
-    replacementReason:
-      "Contains identifiable test-user names or profile imagery.",
+    replaceBeforeLaunch: false,
+    replacementReason: null,
   },
 } as const satisfies Record<string, NexoraImage>;

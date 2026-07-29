@@ -55,9 +55,6 @@ public/
 
 - Reviewed copy for every project and experience entry
 - Replace the zero-value GuitarSense Practice Summary capture with a meaningful completed session before public launch
-- Nexora screenshot replacements before public launch:
-  - Replace the Explore capture with owned media instead of third-party test artwork
-  - Replace the messaging capture containing test-user names or profile imagery
 - Grade Watcher project details
 - Confirmed GitHub, LinkedIn, and contact destinations
 - Final résumé

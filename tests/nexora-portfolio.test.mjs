@@ -128,26 +128,17 @@ test("the Nexora case study renders three distinct reviewed screenshots", () => 
   }
 });
 
-test("Nexora screenshot launch readiness distinguishes production authentication", () => {
+test("all rendered Nexora screenshots are production-ready", () => {
   const registry = read("src/data/nexora-images.ts");
-  const expectedReasons = new Map([
-    ["explore", "Contains third-party artwork or media used as test content."],
-    ["messaging", "Contains identifiable test-user names or profile imagery."],
-  ]);
 
-  for (const [key, reason] of expectedReasons) {
-    const entry = registryEntry(registry, key);
-
-    assert.match(entry, /replaceBeforeLaunch:\s*true/);
-    assert.match(entry, new RegExp(reason.replaceAll(".", "\\.")));
-  }
-
-  for (const image of ["homeFeed", "authentication"]) {
+  for (const image of ["homeFeed", "explore", "authentication", "messaging"]) {
     const entry = registryEntry(registry, image);
 
     assert.match(entry, /replaceBeforeLaunch:\s*false/);
     assert.match(entry, /replacementReason:\s*null/);
   }
+
+  assert.doesNotMatch(registry, /replaceBeforeLaunch:\s*true/);
 
   const publicSource = [
     read("src/app/projects/nexora/page.tsx"),
@@ -183,14 +174,63 @@ test("the production authentication image exists with matching PNG dimensions", 
   assert.match(authentication, /height:\s*769/);
 });
 
-test("the internal checklist records only remaining Nexora screenshot cleanup", () => {
+test("the production Explore and Messaging images exist with matching PNG dimensions", () => {
+  const registry = read("src/data/nexora-images.ts");
+  const expectedImages = [
+    {
+      key: "explore",
+      path: "public/images/projects/nexora/feed.png",
+      src: "/images/projects/nexora/feed.png",
+      width: 1882,
+      height: 848,
+    },
+    {
+      key: "messaging",
+      path: "public/images/projects/nexora/messaging.png",
+      src: "/images/projects/nexora/messaging.png",
+      width: 1262,
+      height: 855,
+    },
+  ];
+
+  for (const image of expectedImages) {
+    assert.ok(existsSync(image.path), `${image.key} image should exist`);
+
+    const file = readFileSync(image.path);
+    const entry = registryEntry(registry, image.key);
+
+    assert.equal(file.subarray(0, 8).toString("hex"), "89504e470d0a1a0a");
+    assert.equal(file.readUInt32BE(16), image.width);
+    assert.equal(file.readUInt32BE(20), image.height);
+    assert.match(entry, new RegExp(`src:\\s*"${image.src.replaceAll(".", "\\.")}"`));
+    assert.match(entry, new RegExp(`width:\\s*${image.width}`));
+    assert.match(entry, new RegExp(`height:\\s*${image.height}`));
+  }
+
+  assert.doesNotMatch(registry, /feed\.jpg|mesaj\.jpg/);
+});
+
+test("the cropped Messaging description matches the active conversation view", () => {
+  const registry = read("src/data/nexora-images.ts");
+  const messaging = registryEntry(registry, "messaging");
+
+  assert.match(
+    messaging,
+    /alt:\s*"Nexora direct-message interface showing an online demo conversation and realtime message updates"/,
+  );
+  assert.match(
+    messaging,
+    /Firebase-backed direct messaging with presence, delivery state and realtime conversation updates\./,
+  );
+  assert.doesNotMatch(messaging, /conversation list/i);
+});
+
+test("the internal checklist keeps only the pending GuitarSense screenshot", () => {
   const readme = read("README.md");
 
-  assert.match(readme, /Nexora screenshot replacements before public launch/);
-  assert.match(readme, /Explore/i);
-  assert.match(readme, /test-user names or profile imagery/i);
+  assert.match(readme, /GuitarSense Practice Summary/i);
   assert.doesNotMatch(
     readme,
-    /home feed|authentication|unrealistic test email/i,
+    /Nexora screenshot replacements|home feed|Explore capture|messaging capture|authentication|unrealistic test email/i,
   );
 });
