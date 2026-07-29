@@ -120,16 +120,10 @@ export default function GuitarSensePage() {
                   imagePosition="left"
                 />
                 <ProductWalkthroughRow
-                  heading="Turn sessions into focused practice"
-                  text="Session summaries surface accuracy, streaks, detected techniques and the sections that need the most attention."
-                  image={guitarSenseImages.practiceSummary}
-                  imagePosition="right"
-                />
-                <ProductWalkthroughRow
                   heading="Import without hiding runtime state"
                   text="Local and YouTube-oriented workflows expose core, live-audio and AI runtime readiness instead of assuming every dependency is already installed."
                   image={guitarSenseImages.importWorkflow}
-                  imagePosition="left"
+                  imagePosition="right"
                 />
               </div>
             </section>

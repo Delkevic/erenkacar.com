@@ -9,6 +9,7 @@ export type Project = {
   href: string | null;
   featured: boolean;
   image?: ScreenshotImage;
+  visual?: "automation-flow";
 };
 
 export type ExperienceEntry = {

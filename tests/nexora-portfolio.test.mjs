@@ -225,12 +225,11 @@ test("the cropped Messaging description matches the active conversation view", (
   assert.doesNotMatch(messaging, /conversation list/i);
 });
 
-test("the internal checklist keeps only the pending GuitarSense screenshot", () => {
+test("the internal checklist has no pending project screenshot replacements", () => {
   const readme = read("README.md");
 
-  assert.match(readme, /GuitarSense Practice Summary/i);
   assert.doesNotMatch(
     readme,
-    /Nexora screenshot replacements|home feed|Explore capture|messaging capture|authentication|unrealistic test email/i,
+    /Practice Summary|screenshot replacements|home feed|Explore capture|messaging capture|authentication|unrealistic test email/i,
   );
 });

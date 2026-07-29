@@ -35,15 +35,16 @@ export const projects: Project[] = [
     name: "Grade Watcher",
     eyebrow: "Browser automation",
     summary:
-      "A private automation system that monitors academic result changes and sends Telegram notifications when new results are detected.",
+      "A private browser automation system that monitors academic result changes and sends Telegram notifications when new results are detected.",
     tags: ["Python", "Playwright", "Telegram Bot API", "Automation"],
     proofPoints: [
       "Authenticated session handling",
-      "Change detection",
-      "Telegram notifications",
+      "Result change detection",
+      "Duplicate-safe notifications",
     ],
-    href: null,
+    href: "/projects/grade-watcher",
     featured: false,
+    visual: "automation-flow",
   },
 ];
 

@@ -63,15 +63,4 @@ export const guitarSenseImages = {
     frame: "natural",
     replaceBeforeLaunch: false,
   },
-  practiceSummary: {
-    src: "/images/projects/guitarsense/practice-summary.png",
-    width: 1155,
-    height: 906,
-    alt: "GuitarSense practice summary showing session statistics and recommended practice sections",
-    caption:
-      "Session summaries surface accuracy, streaks, techniques and recommended practice sections.",
-    placement: "walkthrough",
-    frame: "natural",
-    replaceBeforeLaunch: true,
-  },
 } as const satisfies Record<string, GuitarSenseImage>;

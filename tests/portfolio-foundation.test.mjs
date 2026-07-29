@@ -80,14 +80,18 @@ test("the homepage exposes every navigation section target", () => {
   }
 });
 
-test("site configuration keeps unknown contact destinations nullable", () => {
+test("site configuration centralizes verified public destinations", () => {
   const config = read("src/config/site.ts");
 
   assert.match(config, /domain:\s*"https:\/\/erenkacar\.com"/);
-  assert.match(config, /githubUrl:\s*null/);
-  assert.match(config, /linkedinUrl:\s*null/);
-  assert.match(config, /contactUrl:\s*null/);
-  assert.match(config, /resumePath:\s*null/);
+  assert.match(config, /githubUrl:\s*"https:\/\/github\.com\/Delkevic"/);
+  assert.match(
+    config,
+    /linkedinUrl:\s*"https:\/\/www\.linkedin\.com\/in\/eren-kacar-7bb143251\/"/,
+  );
+  assert.match(config, /email:\s*"erenkacr@gmail\.com"/);
+  assert.match(config, /contactUrl:\s*"mailto:erenkacr@gmail\.com"/);
+  assert.match(config, /resumePath:\s*"\/resume\/eren-kacar-resume\.pdf"/);
 });
 
 test("reviewed project data describes GuitarSense, Nexora, and Grade Watcher", () => {
@@ -170,7 +174,7 @@ test("the GuitarSense image registry references real accessible screenshot asset
     (match) => match.groups?.alt,
   );
 
-  assert.equal(sources.length, 6);
+  assert.equal(sources.length, 5);
   assert.equal(altTexts.length, sources.length);
 
   for (const source of sources) {
@@ -220,20 +224,34 @@ test("GuitarSense screenshot mappings and launch readiness stay explicit", () =>
   for (const image of [
     "practiceView",
     "presetEditor",
-    "practiceSummary",
     "audioSettings",
     "importWorkflow",
   ]) {
     assert.match(caseStudy, new RegExp(`guitarSenseImages\\.${image}`));
   }
-  assert.match(registryEntry(registry, "practiceView"), /replaceBeforeLaunch:\s*false/);
-  assert.match(registryEntry(registry, "practiceSummary"), /replaceBeforeLaunch:\s*true/);
-  for (const image of ["presetEditor", "practiceSummary", "importWorkflow"]) {
+  for (const image of [
+    "library",
+    "practiceView",
+    "presetEditor",
+    "audioSettings",
+    "importWorkflow",
+  ]) {
+    assert.match(
+      registryEntry(registry, image),
+      /replaceBeforeLaunch:\s*false/,
+    );
+  }
+  for (const image of ["presetEditor", "importWorkflow"]) {
     assert.match(
       registryEntry(registry, image),
       /placement: "walkthrough"/,
     );
   }
+  assert.doesNotMatch(registry, /replaceBeforeLaunch:\s*true/);
+  assert.doesNotMatch(
+    [registry, caseStudy].join("\n"),
+    /practiceSummary|practice-summary\.png/i,
+  );
   assert.doesNotMatch(
     [registry, homepage, caseStudy].join("\n"),
     /full[- ]tab|telephone/i,
@@ -281,7 +299,7 @@ test("Key features stays a screenshot-free presentation of all six feature group
   assert.doesNotMatch(keyFeatures, /ScreenshotFigure|guitarSenseImages\./);
 });
 
-test("Product walkthrough owns its three supporting product screenshots", () => {
+test("Product walkthrough owns only its two useful supporting screenshots", () => {
   const page = read("src/app/projects/guitarsense/page.tsx");
   const walkthrough = sectionBetween(
     page,
@@ -289,11 +307,12 @@ test("Product walkthrough owns its three supporting product screenshots", () => 
     "Architecture",
   );
 
-  for (const image of ["presetEditor", "practiceSummary", "importWorkflow"]) {
+  for (const image of ["presetEditor", "importWorkflow"]) {
     assert.match(walkthrough, new RegExp(`guitarSenseImages\\.${image}`));
   }
 
-  assert.match(walkthrough, /<ProductWalkthroughRow/);
+  assert.equal(walkthrough.match(/<ProductWalkthroughRow/g)?.length, 2);
+  assert.doesNotMatch(walkthrough, /practiceSummary|Practice Summary/i);
   assert.equal(page.match(/guitarSenseImages\.importWorkflow/g)?.length, 1);
 });
 
@@ -315,7 +334,6 @@ test("GuitarSense screenshot alt text remains descriptive and reviewed", () => {
     "GuitarSense preset editor with output level and guitar effects chain controls",
     "GuitarSense import screen showing local, YouTube and AI-assisted import options",
     "GuitarSense advanced audio settings with backend, device and buffer-size controls",
-    "GuitarSense practice summary showing session statistics and recommended practice sections",
   ];
 
   for (const altText of altTexts) {
@@ -326,7 +344,6 @@ test("GuitarSense screenshot alt text remains descriptive and reviewed", () => {
     "Custom preset creation with output control and an editable effects chain.",
     "Local and YouTube-oriented import workflows with separate core, live-audio and AI runtime states.",
     "Audio backend, device, buffer-size and synchronization controls used during backend testing.",
-    "Session summaries surface accuracy, streaks, techniques and recommended practice sections.",
   ]) {
     assert.match(registry, new RegExp(caption.replaceAll(".", "\\.")));
   }

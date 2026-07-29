@@ -40,6 +40,7 @@ test("visual polish preserves server components and introduces no fake links", (
     "src/app/page.tsx",
     "src/app/projects/guitarsense/page.tsx",
     "src/app/projects/nexora/page.tsx",
+    "src/app/projects/grade-watcher/page.tsx",
     "src/components/layout/site-header.tsx",
     "src/components/sections/contact.tsx",
   ];
@@ -47,5 +48,5 @@ test("visual polish preserves server components and introduces no fake links", (
 
   assert.doesNotMatch(source, /["']use client["']/);
   assert.doesNotMatch(source, /href=["']#["']/);
-  assert.doesNotMatch(source, /(?:github|linkedin|mailto):/i);
+  assert.doesNotMatch(source, /example\.com|placeholder/i);
 });

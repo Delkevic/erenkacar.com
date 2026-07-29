@@ -1,5 +1,8 @@
 import Link from "next/link";
+import { ExternalLink } from "@/components/ui/external-link";
+import { InterfaceIcon } from "@/components/ui/interface-icon";
 import { Container } from "@/components/ui/container";
+import { siteConfig } from "@/config/site";
 
 export function Hero() {
   return (
@@ -23,6 +26,26 @@ export function Hero() {
               About me
             </Link>
           </div>
+          <nav className="profile-links" aria-label="Profile and CV links">
+            <ExternalLink href={siteConfig.githubUrl}>
+              <InterfaceIcon name="github" />
+              GitHub
+              <span aria-hidden="true">↗</span>
+            </ExternalLink>
+            <ExternalLink href={siteConfig.linkedinUrl}>
+              <InterfaceIcon name="linkedin" />
+              LinkedIn
+              <span aria-hidden="true">↗</span>
+            </ExternalLink>
+            <a
+              href={siteConfig.resumePath}
+              download
+              aria-label="Download Eren Kaçar’s CV as PDF"
+            >
+              <InterfaceIcon name="download" />
+              Download CV
+            </a>
+          </nav>
         </div>
         <aside className="hero__note" aria-label="Current focus">
           <strong>Current focus</strong>

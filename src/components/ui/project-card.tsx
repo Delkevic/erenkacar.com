@@ -1,6 +1,8 @@
 import Link from "next/link";
+import { AutomationFlow } from "@/components/ui/automation-flow";
 import { InterfaceIcon } from "@/components/ui/interface-icon";
 import { ScreenshotFigure } from "@/components/ui/screenshot-figure";
+import { gradeWatcherCaseStudy } from "@/data/grade-watcher";
 import type { Project } from "@/types/content";
 
 type ProjectCardProps = {
@@ -11,7 +13,9 @@ type ProjectCardProps = {
 export function ProjectCard({ project, index }: ProjectCardProps) {
   return (
     <article
-      className={`project-card${project.image ? " project-card--with-image" : ""}`}
+      className={`project-card${
+        project.image || project.visual ? " project-card--with-visual" : ""
+      }`}
     >
       <span className="project-card__index" aria-hidden="true">
         {String(index).padStart(2, "0")}
@@ -21,6 +25,13 @@ export function ProjectCard({ project, index }: ProjectCardProps) {
           image={project.image}
           className="project-card__visual"
           sizes="(max-width: 780px) calc(100vw - 4.7rem), 34rem"
+        />
+      ) : null}
+      {project.visual === "automation-flow" ? (
+        <AutomationFlow
+          stages={gradeWatcherCaseStudy.homepageFlow}
+          label="Grade Watcher automation flow"
+          variant="compact"
         />
       ) : null}
       <p className="project-kicker">

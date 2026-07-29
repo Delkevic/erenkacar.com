@@ -3,7 +3,10 @@ export type InterfaceIconName =
   | "code"
   | "database"
   | "desktop"
+  | "download"
+  | "github"
   | "layers"
+  | "linkedin"
   | "mail"
   | "server"
   | "waveform"
@@ -34,10 +37,28 @@ const iconPaths: Record<InterfaceIconName, React.ReactNode> = {
       <path d="M8 21h8m-4-4v4" />
     </>
   ),
+  download: (
+    <>
+      <path d="M12 3v12m0 0 4-4m-4 4-4-4" />
+      <path d="M5 20h14" />
+    </>
+  ),
+  github: (
+    <>
+      <path d="M15 21v-3.9c0-1 .1-1.4-.5-2 2.8-.3 5.7-1.4 5.7-6.2 0-1.4-.5-2.5-1.3-3.4.1-.3.6-1.6-.1-3.3 0 0-1.1-.3-3.6 1.3a12.4 12.4 0 0 0-6.5 0C6.2 1.9 5.1 2.2 5.1 2.2c-.7 1.7-.2 3-.1 3.3-.8.9-1.3 2-1.3 3.4 0 4.8 2.9 5.9 5.7 6.2-.5.5-.6 1.2-.6 2V21" />
+      <path d="M8.8 18.1c-2.8.9-2.8-1.4-3.9-1.8" />
+    </>
+  ),
   layers: (
     <>
       <path d="m12 3-9 5 9 5 9-5-9-5Z" />
       <path d="m3 12 9 5 9-5M3 16l9 5 9-5" />
+    </>
+  ),
+  linkedin: (
+    <>
+      <rect x="3" y="3" width="18" height="18" rx="2" />
+      <path d="M8 10v7M8 7v.01M12 17v-7m0 3a3 3 0 0 1 6 0v4" />
     </>
   ),
   mail: (
