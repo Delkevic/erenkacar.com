@@ -1,5 +1,6 @@
 import Link from "next/link";
 import { Container } from "@/components/ui/container";
+import { InterfaceIcon } from "@/components/ui/interface-icon";
 import { ScreenshotFigure } from "@/components/ui/screenshot-figure";
 import { SectionHeader } from "@/components/ui/section-header";
 import { guitarSenseImages } from "@/data/guitarsense-images";
@@ -27,7 +28,10 @@ export function FeaturedProject() {
           />
           <div className="project-feature__content">
             <div>
-              <p className="project-kicker">{featuredProject.eyebrow}</p>
+              <p className="project-kicker">
+                <InterfaceIcon name="desktop" />
+                {featuredProject.eyebrow}
+              </p>
               <h3 className="project-title" id="featured-project-title">
                 {featuredProject.name}
               </h3>

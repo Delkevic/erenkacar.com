@@ -1,4 +1,5 @@
 import Link from "next/link";
+import { InterfaceIcon } from "@/components/ui/interface-icon";
 import { ScreenshotFigure } from "@/components/ui/screenshot-figure";
 import type { Project } from "@/types/content";
 
@@ -22,7 +23,10 @@ export function ProjectCard({ project, index }: ProjectCardProps) {
           sizes="(max-width: 780px) calc(100vw - 4.7rem), 34rem"
         />
       ) : null}
-      <p className="project-kicker">{project.eyebrow}</p>
+      <p className="project-kicker">
+        <InterfaceIcon name={project.image ? "layers" : "automation"} />
+        {project.eyebrow}
+      </p>
       <h3>{project.name}</h3>
       <p>{project.summary}</p>
       <ul className="proof-list" aria-label={`${project.name} feature points`}>

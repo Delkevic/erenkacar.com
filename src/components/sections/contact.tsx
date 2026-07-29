@@ -1,4 +1,5 @@
 import { Container } from "@/components/ui/container";
+import { InterfaceIcon } from "@/components/ui/interface-icon";
 
 export function Contact() {
   return (
@@ -9,7 +10,10 @@ export function Contact() {
     >
       <Container className="contact-panel">
         <div>
-          <p className="eyebrow">06 / Contact</p>
+          <p className="eyebrow eyebrow--with-icon">
+            <InterfaceIcon name="mail" />
+            06 / Contact
+          </p>
           <h2 id="contact-title">Let’s build something useful.</h2>
         </div>
         <p className="contact-panel__note">

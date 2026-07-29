@@ -1,7 +1,18 @@
+import {
+  InterfaceIcon,
+  type InterfaceIconName,
+} from "@/components/ui/interface-icon";
+
 type ArchitectureFlowProps = {
   steps: readonly string[];
   runtimes: readonly string[];
 };
+
+const architectureIcons: InterfaceIconName[] = [
+  "desktop",
+  "workflow",
+  "waveform",
+];
 
 export function ArchitectureFlow({
   steps,
@@ -12,7 +23,13 @@ export function ArchitectureFlow({
       <ol className="architecture__flow" aria-label="Application architecture">
         {steps.map((step, index) => (
           <li className="architecture__step" key={step}>
-            <span>{step}</span>
+            <span>
+              <InterfaceIcon
+                name={architectureIcons[index] ?? "server"}
+                className="architecture__icon"
+              />
+              {step}
+            </span>
             {index < steps.length - 1 ? (
               <span className="architecture__arrow" aria-hidden="true">
                 →

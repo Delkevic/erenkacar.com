@@ -28,7 +28,10 @@ export default function GuitarSensePage() {
   return (
     <>
       <SiteHeader />
-      <main id="main-content">
+      <main
+        id="main-content"
+        className="case-study case-study--guitarsense"
+      >
         <Container>
           <header className="case-hero">
             <Link className="text-link back-link" href="/#work">

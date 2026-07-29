@@ -1,6 +1,18 @@
 import { Container } from "@/components/ui/container";
+import {
+  InterfaceIcon,
+  type InterfaceIconName,
+} from "@/components/ui/interface-icon";
 import { SectionHeader } from "@/components/ui/section-header";
 import { toolkit } from "@/data/toolkit";
+
+const toolkitIcons: Record<string, InterfaceIconName> = {
+  Languages: "code",
+  Frontend: "layers",
+  "Backend and data": "database",
+  "Desktop and systems": "desktop",
+  "Audio and automation": "waveform",
+};
 
 export function Toolkit() {
   return (
@@ -16,7 +28,10 @@ export function Toolkit() {
         <div className="toolkit-grid">
           {toolkit.map((group) => (
             <section className="toolkit-group" key={group.title}>
-              <h3>{group.title}</h3>
+              <h3>
+                <InterfaceIcon name={toolkitIcons[group.title] ?? "code"} />
+                {group.title}
+              </h3>
               <ul>
                 {group.items.map((item) => (
                   <li key={item}>{item}</li>

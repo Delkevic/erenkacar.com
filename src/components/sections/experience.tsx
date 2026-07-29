@@ -1,4 +1,5 @@
 import { Container } from "@/components/ui/container";
+import { InterfaceIcon } from "@/components/ui/interface-icon";
 import { SectionHeader } from "@/components/ui/section-header";
 import { experience } from "@/data/experience";
 
@@ -20,7 +21,10 @@ export function Experience() {
           {experience.map((entry) => (
             <li className="timeline__item" key={entry.organization}>
               <div>
-                <h3>{entry.organization}</h3>
+                <h3 className="timeline__heading">
+                  <InterfaceIcon name="workflow" />
+                  {entry.organization}
+                </h3>
                 <p className="timeline__role">{entry.role}</p>
                 {entry.date ? (
                   <p className="timeline__date">{entry.date}</p>

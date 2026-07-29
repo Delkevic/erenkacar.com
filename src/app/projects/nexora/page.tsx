@@ -4,6 +4,7 @@ import { ProductWalkthroughRow } from "@/components/case-study/product-walkthrou
 import { SiteFooter } from "@/components/layout/site-footer";
 import { SiteHeader } from "@/components/layout/site-header";
 import { Container } from "@/components/ui/container";
+import { InterfaceIcon } from "@/components/ui/interface-icon";
 import { ScreenshotFigure } from "@/components/ui/screenshot-figure";
 import { nexoraCaseStudy } from "@/data/nexora-case-study";
 import { nexoraImages } from "@/data/nexora-images";
@@ -30,7 +31,10 @@ export default function NexoraPage() {
   return (
     <>
       <SiteHeader />
-      <main id="main-content" className="nexora-case">
+      <main
+        id="main-content"
+        className="case-study case-study--nexora nexora-case"
+      >
         <Container>
           <header className="case-hero">
             <Link className="text-link back-link" href="/#work">
@@ -117,15 +121,24 @@ export default function NexoraPage() {
                   aria-label="Core application architecture"
                 >
                   <li>
-                    <span>React Client</span>
+                    <span>
+                      <InterfaceIcon name="desktop" />
+                      React Client
+                    </span>
                     <span aria-hidden="true">→</span>
                   </li>
                   <li>
-                    <span>Go / Gin API</span>
+                    <span>
+                      <InterfaceIcon name="server" />
+                      Go / Gin API
+                    </span>
                     <span aria-hidden="true">→</span>
                   </li>
                   <li>
-                    <span>MySQL</span>
+                    <span>
+                      <InterfaceIcon name="database" />
+                      MySQL
+                    </span>
                   </li>
                 </ol>
                 <div className="nexora-architecture__services">
