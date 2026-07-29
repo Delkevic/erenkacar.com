@@ -9,7 +9,7 @@ export const experience: ExperienceEntry[] = [
       "Developed and maintained student-affairs workflows using the Bimser Synergy low-code platform, while also contributing supporting internal tools with Go, React and MySQL.",
     highlights: [
       "Built and maintained workflow-based administrative processes in Bimser Synergy.",
-      "Contributed to processes through which more than 100 student requests were handled.",
+      "Contributed to processes through which more than 1,000 student requests were handled.",
       "Worked directly with administrative users to understand and improve operational workflows.",
     ],
     technologies: [

@@ -114,6 +114,14 @@ test("reviewed experience keeps Bimser Synergy central and dates factual", () =>
   assert.match(experience, /role:\s*"Software Developer"/);
   assert.match(experience, /date:\s*"Mar 2025 — Jun 2026"/);
   assert.match(experience, /using the Bimser Synergy low-code platform/);
+  assert.match(
+    experience,
+    /more than 1,000 student requests were handled\./,
+  );
+  assert.doesNotMatch(
+    experience,
+    /more than 100 student requests were handled\./,
+  );
   assert.match(experience, /organization:\s*"Turkcell"/);
   assert.match(experience, /date:\s*null/);
 });
