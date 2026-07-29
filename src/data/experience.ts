@@ -3,18 +3,39 @@ import type { ExperienceEntry } from "@/types/content";
 export const experience: ExperienceEntry[] = [
   {
     organization: "Trakya University Student Affairs",
-    role: "Workflow Development",
+    role: "Software Developer",
+    date: "Mar 2025 — Jun 2026",
     summary:
-      "Bimser Synergy workflow development, with smaller supporting work across Go, React, and MySQL.",
-    technologies: ["Bimser Synergy", "Go", "React", "MySQL"],
-    needsReview: true,
+      "Developed and maintained student-affairs workflows using the Bimser Synergy low-code platform, while also contributing supporting internal tools with Go, React and MySQL.",
+    highlights: [
+      "Built and maintained workflow-based administrative processes in Bimser Synergy.",
+      "Contributed to processes through which more than 100 student requests were handled.",
+      "Worked directly with administrative users to understand and improve operational workflows.",
+    ],
+    technologies: [
+      "Bimser Synergy",
+      "Workflow Automation",
+      "Go",
+      "React",
+      "MySQL",
+    ],
   },
   {
     organization: "Turkcell",
-    role: "Linux Systems Administration Internship",
+    role: "Linux Systems Administration Intern",
+    date: null,
     summary:
-      "Linux systems administration internship. Scope and supporting details will be expanded after content review.",
-    technologies: ["Linux"],
-    needsReview: true,
+      "Worked with Linux system-administration workflows and observed enterprise infrastructure, operational practices and technical documentation processes.",
+    highlights: [
+      "Worked with Linux administration and system-operation workflows.",
+      "Observed enterprise infrastructure and operational processes.",
+      "Documented technical tasks and system practices.",
+    ],
+    technologies: [
+      "Linux",
+      "Systems Administration",
+      "Infrastructure",
+      "Technical Documentation",
+    ],
   },
 ];

@@ -6,7 +6,7 @@ export function SiteFooter() {
     <footer className="site-footer">
       <Container className="site-footer__inner">
         <span>{siteConfig.name} — Software Engineer</span>
-        <span>Portfolio foundation · Content in review</span>
+        <span>Desktop · Web · Real-time systems</span>
       </Container>
     </footer>
   );

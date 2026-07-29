@@ -11,8 +11,9 @@ export function Hero() {
             Building end-to-end desktop, web and real-time products.
           </h1>
           <p className="hero__lead">
-            I turn ideas into working software, from user interfaces and backend
-            systems to performance, security and deployment.
+            I build usable software across desktop and web, with a focus on
+            real-time systems, product architecture, performance, security and
+            the path from prototype to distributable product.
           </p>
           <div className="hero__actions">
             <Link className="button button--primary" href="/#work">
@@ -23,10 +24,10 @@ export function Hero() {
             </Link>
           </div>
         </div>
-        <aside className="hero__note" aria-label="Portfolio status">
+        <aside className="hero__note" aria-label="Current focus">
           <strong>Current focus</strong>
-          Product-first case studies that explain the engineering decisions
-          behind working software.
+          Building GuitarSense and documenting the engineering decisions behind
+          a real-time desktop product.
         </aside>
       </Container>
     </section>

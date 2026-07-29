@@ -10,7 +10,7 @@ export function Toolkit() {
           <SectionHeader
             eyebrow="04 / Technical toolkit"
             title="Tools chosen to move a product forward."
-            intro="A compact, provisional view of the technologies represented in the current portfolio content."
+            intro="Technologies used across interface, backend, desktop, audio and automation work."
           />
         </div>
         <div className="toolkit-grid">

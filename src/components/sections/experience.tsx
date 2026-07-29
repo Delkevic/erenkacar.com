@@ -14,7 +14,6 @@ export function Experience() {
           <SectionHeader
             eyebrow="03 / Experience"
             title="Building workflows and learning systems from the inside."
-            intro="Dates, expanded responsibilities, and final role descriptions will be added after review."
           />
         </div>
         <ol className="timeline">
@@ -23,9 +22,17 @@ export function Experience() {
               <div>
                 <h3>{entry.organization}</h3>
                 <p className="timeline__role">{entry.role}</p>
+                {entry.date ? (
+                  <p className="timeline__date">{entry.date}</p>
+                ) : null}
               </div>
               <div>
                 <p className="timeline__summary">{entry.summary}</p>
+                <ul className="detail-list">
+                  {entry.highlights.map((highlight) => (
+                    <li key={highlight}>{highlight}</li>
+                  ))}
+                </ul>
                 <ul
                   className="tag-list"
                   aria-label={`Technologies used at ${entry.organization}`}

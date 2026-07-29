@@ -2,15 +2,23 @@ import type { ToolkitGroup } from "@/types/content";
 
 export const toolkit: ToolkitGroup[] = [
   {
-    title: "Interfaces",
-    items: ["TypeScript", "React", "Next.js", "Tailwind CSS"],
+    title: "Languages",
+    items: ["TypeScript", "JavaScript", "Python", "Go", "Kotlin", "SQL"],
   },
   {
-    title: "Systems & data",
-    items: ["Go", "MySQL", "Linux"],
+    title: "Frontend",
+    items: ["React", "Next.js", "HTML", "CSS", "Responsive UI"],
   },
   {
-    title: "Product engineering",
-    items: ["Desktop", "Web", "Real-time systems", "Deployment"],
+    title: "Backend and data",
+    items: ["Go", "Gin", "REST APIs", "MySQL", "GORM"],
+  },
+  {
+    title: "Desktop and systems",
+    items: ["Electron", "IPC", "ZMQ", "Linux", "Windows Packaging"],
+  },
+  {
+    title: "Audio and automation",
+    items: ["PortAudio", "WASAPI", "ASIO", "Playwright", "Telegram Bot API"],
   },
 ];

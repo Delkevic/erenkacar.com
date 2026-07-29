@@ -1,5 +1,4 @@
 import { Container } from "@/components/ui/container";
-import { siteConfig } from "@/config/site";
 
 export function Contact() {
   return (
@@ -11,18 +10,13 @@ export function Contact() {
       <Container className="contact-panel">
         <div>
           <p className="eyebrow">06 / Contact</p>
-          <h2 id="contact-title">Let’s build something that works.</h2>
+          <h2 id="contact-title">Let’s build something useful.</h2>
         </div>
-        {siteConfig.contactUrl ? (
-          <a className="button button--primary" href={siteConfig.contactUrl}>
-            Start a conversation
-          </a>
-        ) : (
-          <p className="contact-panel__note">
-            Contact and external profile links will appear here once their final
-            destinations are confirmed.
-          </p>
-        )}
+        <p className="contact-panel__note">
+          I’m interested in software engineering roles and collaborations
+          involving desktop products, full-stack systems, automation and
+          real-time applications.
+        </p>
       </Container>
     </section>
   );

@@ -10,7 +10,7 @@ export function SelectedProjects() {
         <div id="selected-projects-title">
           <SectionHeader
             eyebrow="02 / Selected projects"
-            title="More products, with the details still to come."
+            title="Selected work across full-stack systems and automation."
           />
         </div>
         <div className="project-grid">
