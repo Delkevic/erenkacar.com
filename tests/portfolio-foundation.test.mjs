@@ -1,8 +1,28 @@
 import assert from "node:assert/strict";
-import { readFileSync } from "node:fs";
+import { existsSync, readFileSync } from "node:fs";
 import test from "node:test";
 
 const read = (path) => readFileSync(path, "utf8");
+
+const sectionBetween = (source, heading, nextHeading) => {
+  const start = source.indexOf(`<h2>${heading}</h2>`);
+  const end = source.indexOf(`<h2>${nextHeading}</h2>`, start + 1);
+
+  assert.ok(start >= 0, `${heading} section should exist`);
+  assert.ok(end > start, `${nextHeading} should follow ${heading}`);
+
+  return source.slice(start, end);
+};
+
+const registryEntry = (source, image) => {
+  const entry = source.match(
+    new RegExp(`${image}:\\s*\\{(?<body>[^}]*)\\}`),
+  )?.groups?.body;
+
+  assert.ok(entry, `${image} registry entry should exist`);
+
+  return entry;
+};
 
 test("the homepage composes the required sections in order", () => {
   const page = read("src/app/page.tsx");
@@ -88,7 +108,7 @@ test("reviewed experience keeps Bimser Synergy central and dates factual", () =>
 
   assert.match(experience, /organization:\s*"Trakya University Student Affairs"/);
   assert.match(experience, /role:\s*"Software Developer"/);
-  assert.match(experience, /date:\s*"Mar 2025 — Jun 2025"/);
+  assert.match(experience, /date:\s*"Mar 2025 — Jun 2026"/);
   assert.match(experience, /using the Bimser Synergy low-code platform/);
   assert.match(experience, /organization:\s*"Turkcell"/);
   assert.match(experience, /date:\s*null/);
@@ -98,7 +118,7 @@ test("the GuitarSense case study qualifies latency and exposes its architecture"
   const page = read("src/app/projects/guitarsense/page.tsx");
   const content = read("src/data/case-study.ts");
 
-  assert.match(page, /GuitarSense interface preview/);
+  assert.match(page, /guitarSenseImages\.practiceView/);
   assert.match(content, /not laboratory-measured end-to-end round-trip latency/);
   assert.match(content, /React Renderer/);
   assert.match(content, /Electron Main Process/);
@@ -141,18 +161,193 @@ test("pages contain no dead hash links or unnecessary client boundaries", () => 
   assert.doesNotMatch(source, /["']use client["']/);
 });
 
-test("the GuitarSense case-study media stays route-specific and viewport-conscious", () => {
-  const styles = read("src/app/globals.css");
-  const casePlaceholder =
-    styles.match(/\.case-placeholder\s*\{(?<declarations>[^}]*)\}/)?.groups
-      ?.declarations ?? "";
+test("the GuitarSense image registry references real accessible screenshot assets", () => {
+  const registry = read("src/data/guitarsense-images.ts");
+  const sources = [
+    ...registry.matchAll(/src:\s*"(?<src>\/images\/projects\/guitarsense\/[^"]+)"/g),
+  ].map((match) => match.groups?.src);
+  const altTexts = [...registry.matchAll(/alt:\s*"(?<alt>[^"]+)"/g)].map(
+    (match) => match.groups?.alt,
+  );
 
-  assert.match(casePlaceholder, /width:\s*min\(100%,\s*70rem\)/);
-  assert.match(casePlaceholder, /max-height:\s*32rem/);
-  assert.match(casePlaceholder, /margin-inline:\s*auto/);
-  assert.match(casePlaceholder, /aspect-ratio:\s*16\s*\/\s*9/);
+  assert.equal(sources.length, 6);
+  assert.equal(altTexts.length, sources.length);
+
+  for (const source of sources) {
+    assert.ok(source);
+    assert.ok(existsSync(`public${source}`), `${source} should exist`);
+  }
+
+  for (const alt of altTexts) {
+    assert.ok(alt?.trim(), "Every screenshot should have non-empty alt text");
+  }
+});
+
+test("GuitarSense screenshot mappings and launch readiness stay explicit", () => {
+  const registry = read("src/data/guitarsense-images.ts");
+  const homepage = read("src/components/sections/featured-project.tsx");
+  const caseStudy = read("src/app/projects/guitarsense/page.tsx");
+
+  assert.match(homepage, /guitarSenseImages\.library/);
+  for (const image of [
+    "practiceView",
+    "presetEditor",
+    "practiceSummary",
+    "audioSettings",
+    "importWorkflow",
+  ]) {
+    assert.match(caseStudy, new RegExp(`guitarSenseImages\\.${image}`));
+  }
+  assert.match(registryEntry(registry, "practiceView"), /replaceBeforeLaunch:\s*false/);
+  assert.match(registryEntry(registry, "practiceSummary"), /replaceBeforeLaunch:\s*true/);
+  for (const image of ["presetEditor", "practiceSummary", "importWorkflow"]) {
+    assert.match(
+      registryEntry(registry, image),
+      /placement: "walkthrough"/,
+    );
+  }
+  assert.doesNotMatch(
+    [registry, homepage, caseStudy].join("\n"),
+    /full[- ]tab|telephone/i,
+  );
+});
+
+test("the GuitarSense case study keeps its reviewed section order", () => {
+  const page = read("src/app/projects/guitarsense/page.tsx");
+  const headings = [
+    "My role",
+    "Overview",
+    "The problem",
+    "The solution",
+    "Key features",
+    "Product walkthrough",
+    "Architecture",
+    "Engineering challenges",
+    "Results",
+  ];
+  let previousIndex = -1;
+
+  for (const heading of headings) {
+    const currentIndex = page.indexOf(`<h2>${heading}</h2>`);
+    assert.ok(currentIndex > previousIndex, `${heading} should follow the previous section`);
+    previousIndex = currentIndex;
+  }
+});
+
+test("Key features stays a screenshot-free presentation of all six feature groups", () => {
+  const page = read("src/app/projects/guitarsense/page.tsx");
+  const content = read("src/data/case-study.ts");
+  const keyFeatures = sectionBetween(page, "Key features", "Product walkthrough");
+
+  for (const title of [
+    "Real-time guitar audio",
+    "Tablature workspace",
+    "Practice feedback",
+    "Media importing",
+    "Desktop packaging",
+    "Safety and recovery",
+  ]) {
+    assert.match(content, new RegExp(`title: "${title}"`));
+  }
+
+  assert.doesNotMatch(keyFeatures, /ScreenshotFigure|guitarSenseImages\./);
+});
+
+test("Product walkthrough owns its three supporting product screenshots", () => {
+  const page = read("src/app/projects/guitarsense/page.tsx");
+  const walkthrough = sectionBetween(
+    page,
+    "Product walkthrough",
+    "Architecture",
+  );
+
+  for (const image of ["presetEditor", "practiceSummary", "importWorkflow"]) {
+    assert.match(walkthrough, new RegExp(`guitarSenseImages\\.${image}`));
+  }
+
+  assert.match(walkthrough, /<ProductWalkthroughRow/);
+  assert.equal(page.match(/guitarSenseImages\.importWorkflow/g)?.length, 1);
+});
+
+test("Engineering challenges keeps a regular card grid with separate audio evidence", () => {
+  const page = read("src/app/projects/guitarsense/page.tsx");
+  const challenges = sectionBetween(page, "Engineering challenges", "Results");
+
+  assert.match(challenges, /challenge-grid/);
+  assert.match(challenges, /guitarSenseImages\.audioSettings/);
+  assert.match(challenges, /Test configuration interface/);
+  assert.doesNotMatch(challenges, /guitarSenseImages\.importWorkflow/);
+});
+
+test("GuitarSense screenshot alt text remains descriptive and reviewed", () => {
+  const registry = read("src/data/guitarsense-images.ts");
+  const altTexts = [
+    "GuitarSense project library showing saved practice projects and readiness states",
+    "GuitarSense Practice View with tablature, playback controls and practice feedback",
+    "GuitarSense preset editor with output level and guitar effects chain controls",
+    "GuitarSense import screen showing local, YouTube and AI-assisted import options",
+    "GuitarSense advanced audio settings with backend, device and buffer-size controls",
+    "GuitarSense practice summary showing session statistics and recommended practice sections",
+  ];
+
+  for (const altText of altTexts) {
+    assert.match(registry, new RegExp(`alt: "${altText}"`));
+  }
+
+  for (const caption of [
+    "Custom preset creation with output control and an editable effects chain.",
+    "Local and YouTube-oriented import workflows with separate core, live-audio and AI runtime states.",
+    "Audio backend, device, buffer-size and synchronization controls used during backend testing.",
+    "Session summaries surface accuracy, streaks, techniques and recommended practice sections.",
+  ]) {
+    assert.match(registry, new RegExp(caption.replaceAll(".", "\\.")));
+  }
+});
+
+test("rendered GuitarSense media uses Next Image without old placeholders", () => {
+  const figure = read("src/components/ui/screenshot-figure.tsx");
+  const homepage = read("src/components/sections/featured-project.tsx");
+  const caseStudy = read("src/app/projects/guitarsense/page.tsx");
+  const source = [homepage, caseStudy].join("\n");
+
+  assert.match(figure, /from "next\/image"/);
+  assert.match(figure, /<figure/);
+  assert.match(figure, /<figcaption/);
+  assert.match(figure, /loading=\{eager \? "eager" : "lazy"\}/);
+  assert.equal(homepage.match(/\beager\b/g)?.length, 1);
+  assert.equal(caseStudy.match(/\beager\b/g)?.length, 1);
+  assert.doesNotMatch(source, /case-placeholder|project-visual__label/);
+  assert.doesNotMatch(source, /Placeholder for|visual in review/i);
+});
+
+test("the production Practice View renders its complete current screenshot", () => {
+  const registry = read("src/data/guitarsense-images.ts");
+  const styles = read("src/app/globals.css");
+  const practiceView = registryEntry(registry, "practiceView");
+
+  assert.match(practiceView, /width:\s*1897/);
+  assert.match(practiceView, /height:\s*943/);
+  assert.match(practiceView, /frame:\s*"contain"/);
+  assert.doesNotMatch(practiceView, /taskbar-crop/);
   assert.match(
     styles,
-    /\.case-placeholder\s*>\s*img\s*\{[^}]*object-fit:\s*contain/s,
+    /\.case-primary-visual \.screenshot-frame--contain\s*\{[^}]*aspect-ratio:\s*19\s*\/\s*10/s,
+  );
+  assert.match(
+    styles,
+    /\.screenshot-frame--contain \.screenshot-image\s*\{[^}]*object-fit:\s*contain/s,
+  );
+});
+
+test("walkthrough screenshot frames contain the complete source image", () => {
+  const styles = read("src/app/globals.css");
+
+  assert.match(
+    styles,
+    /\.walkthrough-row__figure \.screenshot-frame\s*\{[^}]*position:\s*relative/s,
+  );
+  assert.match(
+    styles,
+    /\.walkthrough-row__figure \.screenshot-image\s*\{[^}]*position:\s*absolute[^}]*inset:\s*0[^}]*height:\s*100%[^}]*object-fit:\s*contain/s,
   );
 });

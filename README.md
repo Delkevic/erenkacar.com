@@ -54,7 +54,7 @@ public/
 ## Content and assets still needed
 
 - Reviewed copy for every project and experience entry
-- GuitarSense screenshots, architecture material, and verified results
+- Replace the zero-value GuitarSense Practice Summary capture with a meaningful completed session before public launch
 - Nexora and Grade Watcher project details
 - Confirmed GitHub, LinkedIn, and contact destinations
 - Final résumé

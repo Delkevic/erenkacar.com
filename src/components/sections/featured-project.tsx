@@ -1,6 +1,8 @@
 import Link from "next/link";
 import { Container } from "@/components/ui/container";
+import { ScreenshotFigure } from "@/components/ui/screenshot-figure";
 import { SectionHeader } from "@/components/ui/section-header";
+import { guitarSenseImages } from "@/data/guitarsense-images";
 import { featuredProject } from "@/data/projects";
 
 export function FeaturedProject() {
@@ -17,15 +19,12 @@ export function FeaturedProject() {
           intro="A desktop product spanning interface design, audio processing, practice tooling, packaging and runtime safety."
         />
         <article className="project-feature">
-          <div
+          <ScreenshotFigure
+            image={guitarSenseImages.library}
             className="project-visual"
-            role="img"
-            aria-label="GuitarSense interface preview"
-          >
-            <span className="project-visual__label">
-              GuitarSense interface preview
-            </span>
-          </div>
+            sizes="(max-width: 780px) calc(100vw - 1.5rem), 39rem"
+            eager
+          />
           <div className="project-feature__content">
             <div>
               <p className="project-kicker">{featuredProject.eyebrow}</p>

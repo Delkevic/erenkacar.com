@@ -1,10 +1,13 @@
 import type { Metadata } from "next";
 import Link from "next/link";
 import { ArchitectureFlow } from "@/components/case-study/architecture-flow";
+import { ProductWalkthroughRow } from "@/components/case-study/product-walkthrough-row";
 import { SiteFooter } from "@/components/layout/site-footer";
 import { SiteHeader } from "@/components/layout/site-header";
 import { Container } from "@/components/ui/container";
+import { ScreenshotFigure } from "@/components/ui/screenshot-figure";
 import { guitarSenseCaseStudy } from "@/data/case-study";
+import { guitarSenseImages } from "@/data/guitarsense-images";
 
 export const metadata: Metadata = {
   title: "GuitarSense",
@@ -46,13 +49,12 @@ export default function GuitarSensePage() {
             </ul>
           </header>
 
-          <div
-            className="case-placeholder"
-            role="img"
-            aria-label="GuitarSense interface preview"
-          >
-            GuitarSense interface preview
-          </div>
+          <ScreenshotFigure
+            image={guitarSenseImages.practiceView}
+            className="case-primary-visual"
+            sizes="(max-width: 780px) calc(100vw - 1.5rem), 60.8rem"
+            eager
+          />
 
           <div className="case-sections">
             <section className="case-section">
@@ -87,7 +89,7 @@ export default function GuitarSensePage() {
               </div>
             </section>
 
-            <section className="case-section">
+            <section className="case-section case-section--full">
               <h2>Key features</h2>
               <div className="case-section__content feature-grid">
                 {guitarSenseCaseStudy.features.map((feature) => (
@@ -96,6 +98,36 @@ export default function GuitarSensePage() {
                     <p>{feature.description}</p>
                   </article>
                 ))}
+              </div>
+            </section>
+
+            <section className="case-section case-section--full">
+              <div className="case-section__header">
+                <h2>Product walkthrough</h2>
+                <p className="case-section__intro">
+                  Selected interfaces showing how GuitarSense brings audio,
+                  practice and media workflows into one desktop application.
+                </p>
+              </div>
+              <div className="case-section__content walkthrough-list">
+                <ProductWalkthroughRow
+                  heading="Build and save guitar tones"
+                  text="Custom presets combine output control, tone-analysis settings and an editable effects chain that can be reused during practice."
+                  image={guitarSenseImages.presetEditor}
+                  imagePosition="left"
+                />
+                <ProductWalkthroughRow
+                  heading="Turn sessions into focused practice"
+                  text="Session summaries surface accuracy, streaks, detected techniques and the sections that need the most attention."
+                  image={guitarSenseImages.practiceSummary}
+                  imagePosition="right"
+                />
+                <ProductWalkthroughRow
+                  heading="Import without hiding runtime state"
+                  text="Local and YouTube-oriented workflows expose core, live-audio and AI runtime readiness instead of assuming every dependency is already installed."
+                  image={guitarSenseImages.importWorkflow}
+                  imagePosition="left"
+                />
               </div>
             </section>
 
@@ -109,24 +141,36 @@ export default function GuitarSensePage() {
               </div>
             </section>
 
-            <section className="case-section">
+            <section className="case-section case-section--full">
               <h2>Engineering challenges</h2>
-              <div className="case-section__content challenge-grid">
-                {guitarSenseCaseStudy.challenges.map((challenge) => (
-                  <article className="challenge-card" key={challenge.title}>
-                    <h3>{challenge.title}</h3>
-                    <p>{challenge.body}</p>
-                    {challenge.qualification ? (
-                      <p className="challenge-card__qualification">
-                        {challenge.qualification}
-                      </p>
-                    ) : null}
-                  </article>
-                ))}
+              <div className="case-section__content challenge-content">
+                <div className="challenge-grid">
+                  {guitarSenseCaseStudy.challenges.map((challenge) => (
+                    <article className="challenge-card" key={challenge.title}>
+                      <h3>{challenge.title}</h3>
+                      <p>{challenge.body}</p>
+                      {challenge.qualification ? (
+                        <p className="challenge-card__qualification">
+                          {challenge.qualification}
+                        </p>
+                      ) : null}
+                    </article>
+                  ))}
+                </div>
+                <div className="challenge-evidence">
+                  <p className="challenge-evidence__label">
+                    Test configuration interface
+                  </p>
+                  <ScreenshotFigure
+                    image={guitarSenseImages.audioSettings}
+                    className="challenge-evidence__figure"
+                    sizes="(max-width: 780px) calc(100vw - 1.5rem), 42rem"
+                  />
+                </div>
               </div>
             </section>
 
-            <section className="case-section">
+            <section className="case-section case-section--full">
               <h2>Results</h2>
               <div className="case-section__content">
                 <ul className="results-list">
