@@ -1,4 +1,5 @@
 import { Container } from "@/components/ui/container";
+import { DecorativeIllustration } from "@/components/ui/decorative-illustration";
 import { ExternalLink } from "@/components/ui/external-link";
 import { InterfaceIcon } from "@/components/ui/interface-icon";
 import { siteConfig } from "@/config/site";
@@ -11,6 +12,7 @@ export function Contact() {
       aria-labelledby="contact-title"
     >
       <Container className="contact-panel">
+        <DecorativeIllustration variant="cable" />
         <div className="contact-panel__intro">
           <p className="eyebrow eyebrow--with-icon">
             <InterfaceIcon name="mail" />

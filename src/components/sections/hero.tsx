@@ -2,11 +2,13 @@ import Link from "next/link";
 import { ExternalLink } from "@/components/ui/external-link";
 import { InterfaceIcon } from "@/components/ui/interface-icon";
 import { Container } from "@/components/ui/container";
+import { DecorativeIllustration } from "@/components/ui/decorative-illustration";
 import { siteConfig } from "@/config/site";
 
 export function Hero() {
   return (
     <section className="hero" aria-labelledby="hero-title">
+      <DecorativeIllustration variant="headstock" />
       <Container className="hero__inner">
         <div>
           <p className="eyebrow">Software Engineer</p>
