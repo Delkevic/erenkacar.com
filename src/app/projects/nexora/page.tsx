@@ -13,9 +13,7 @@ const description =
   "A full-stack social platform built with React, Go, MySQL, Firebase and Gemini-assisted content experiences.";
 
 export const metadata: Metadata = {
-  title: {
-    absolute: "Nexora — Eren Kaçar",
-  },
+  title: "Nexora",
   description,
   alternates: {
     canonical: "/projects/nexora",

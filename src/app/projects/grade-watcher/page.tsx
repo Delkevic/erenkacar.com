@@ -10,9 +10,7 @@ const description =
   "A private Playwright automation project for monitoring academic result changes and sending Telegram notifications.";
 
 export const metadata: Metadata = {
-  title: {
-    absolute: "Grade Watcher — Eren Kaçar",
-  },
+  title: "Grade Watcher",
   description,
   alternates: {
     canonical: "/projects/grade-watcher",

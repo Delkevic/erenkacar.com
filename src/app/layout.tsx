@@ -9,6 +9,10 @@ export const metadata: Metadata = {
     template: "%s — Eren Kaçar",
   },
   description: siteConfig.description,
+  applicationName: siteConfig.name,
+  authors: [{ name: siteConfig.name, url: siteConfig.domain }],
+  creator: siteConfig.name,
+  category: "technology",
   alternates: {
     canonical: "/",
   },
@@ -19,6 +23,15 @@ export const metadata: Metadata = {
     siteName: siteConfig.name,
     title: "Eren Kaçar — Software Engineer",
     description: siteConfig.description,
+  },
+  twitter: {
+    card: "summary_large_image",
+    title: "Eren Kaçar — Software Engineer",
+    description: siteConfig.description,
+  },
+  robots: {
+    index: true,
+    follow: true,
   },
 };
 

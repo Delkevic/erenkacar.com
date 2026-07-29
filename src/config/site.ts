@@ -2,7 +2,7 @@ export const siteConfig = {
   name: "Eren Kaçar",
   domain: "https://erenkacar.com",
   description:
-    "Software engineering portfolio focused on end-to-end desktop, web, and real-time products.",
+    "Software engineer building end-to-end desktop, web and real-time products, with work spanning product architecture, automation, audio systems, performance and security.",
   githubUrl: "https://github.com/Delkevic",
   linkedinUrl: "https://www.linkedin.com/in/eren-kacar-7bb143251/",
   email: "erenkacr@gmail.com",

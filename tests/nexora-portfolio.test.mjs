@@ -100,15 +100,15 @@ test("the concise Nexora case study covers the supplied product facts", () => {
   assert.doesNotMatch(page, /["']use client["']/);
 });
 
-test("the Nexora route exposes factual metadata without a social preview image", () => {
+test("the Nexora route exposes factual metadata with a route social preview", () => {
   const page = read("src/app/projects/nexora/page.tsx");
 
-  assert.match(page, /absolute:\s*"Nexora — Eren Kaçar"/);
+  assert.match(page, /title:\s*"Nexora"/);
   assert.match(
     page,
     /A full-stack social platform built with React, Go, MySQL, Firebase and Gemini-assisted content experiences\./,
   );
-  assert.doesNotMatch(page, /images:\s*\[/);
+  assert.ok(existsSync("src/app/projects/nexora/opengraph-image.tsx"));
 });
 
 test("the Nexora case study renders three distinct reviewed screenshots", () => {

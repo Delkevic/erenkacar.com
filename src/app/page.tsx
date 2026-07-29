@@ -8,10 +8,41 @@ import { Hero } from "@/components/sections/hero";
 import { OtherWork } from "@/components/sections/other-work";
 import { SelectedProjects } from "@/components/sections/selected-projects";
 import { Toolkit } from "@/components/sections/toolkit";
+import { siteConfig } from "@/config/site";
 
 export default function Home() {
+  const structuredData = {
+    "@context": "https://schema.org",
+    "@graph": [
+      {
+        "@type": "Person",
+        name: siteConfig.name,
+        url: siteConfig.domain,
+        jobTitle: "Software Engineer",
+        email: siteConfig.contactUrl,
+        sameAs: [siteConfig.githubUrl, siteConfig.linkedinUrl],
+        alumniOf: {
+          "@type": "CollegeOrUniversity",
+          name: "Trakya University",
+        },
+      },
+      {
+        "@type": "WebSite",
+        name: siteConfig.name,
+        url: siteConfig.domain,
+        inLanguage: "en",
+      },
+    ],
+  };
+
   return (
     <>
+      <script
+        type="application/ld+json"
+        dangerouslySetInnerHTML={{
+          __html: JSON.stringify(structuredData).replace(/</g, "\\u003c"),
+        }}
+      />
       <SiteHeader />
       <main id="main-content">
         <Hero />
