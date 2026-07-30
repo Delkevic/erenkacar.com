@@ -8,14 +8,22 @@ export function DecorativeIllustration({
   const illustration =
     variant === "headstock" ? (
       <>
-        <path d="M115 354 132 166l56-94c10-17 31-24 50-15l12 6-11 118-70 16-18 157" />
-        <path d="m132 166 37 31M151 354l-36-4M177 183l48-107" />
-        <circle cx="202" cy="85" r="5" />
-        <circle cx="218" cy="110" r="5" />
-        <circle cx="226" cy="139" r="5" />
-        <path d="m198 84-24-8m40 34-25-4m33 31-25 1" />
-        <path d="m174 76-18-6m33 36-19-3m27 35-19 2" />
-        <path d="M137 184h36M135 205h34M133 226h33M131 247h33" />
+        <path d="M94 355 119 190l15-25 24-106c6-25 25-42 49-43 15-1 29 4 40 14-2 26-8 52-14 79l-15 67-69 14-10 165Z" />
+        <path d="m119 190 30 0M116 211l31 3M113 233l32 3M110 255l33 3M107 277l34 3" />
+        <path d="M105 355 128 190 194 51M116 355l19-165 69-100M128 355l14-165 63-79" />
+        <circle cx="194" cy="51" r="4" />
+        <circle cx="200" cy="70" r="4" />
+        <circle cx="204" cy="90" r="4" />
+        <circle cx="205" cy="111" r="4" />
+        <circle cx="203" cy="132" r="4" />
+        <circle cx="199" cy="153" r="4" />
+        <path d="m198 51 39-3m-33 22 34-1m-30 21 28 1m-27 20 23 2m-25 19 20 3m-24 18 19 4" />
+        <rect x="237" y="43" width="10" height="10" rx="3" />
+        <rect x="238" y="64" width="10" height="10" rx="3" />
+        <rect x="236" y="86" width="10" height="10" rx="3" />
+        <rect x="232" y="108" width="10" height="10" rx="3" />
+        <rect x="227" y="130" width="10" height="10" rx="3" />
+        <rect x="222" y="152" width="10" height="10" rx="3" />
       </>
     ) : (
       <>

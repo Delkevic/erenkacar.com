@@ -265,7 +265,7 @@ a {
 }
 
 .decorative-illustration--headstock {
-  top: -2.5rem;
+  top: 1rem;
   right: max(-2rem, calc((100vw - var(--container)) / 2 - 4rem));
   width: clamp(11.5rem, 15vw, 14rem);
   transform: rotate(10deg);

@@ -12,6 +12,36 @@ test("the homepage sections render both decorative illustration variants", () =>
   assert.match(contact, /<DecorativeIllustration variant="cable"\s*\/>/);
 });
 
+test("the headstock illustration includes a complete six-tuner layout", () => {
+  const component = read(
+    "src/components/ui/decorative-illustration.tsx",
+  );
+  const headstock = component.slice(
+    component.indexOf('variant === "headstock"'),
+    component.indexOf(") : ("),
+  );
+
+  assert.equal(
+    headstock.match(/<circle\b/g)?.length,
+    6,
+    "The headstock should show six tuning posts",
+  );
+});
+
+test("the headstock starts inside the clipped hero boundary", () => {
+  const styles = read("src/app/globals.css");
+  const headstockRule = styles.match(
+    /\.decorative-illustration--headstock\s*\{(?<body>[^}]*)\}/s,
+  )?.groups?.body;
+
+  assert.ok(headstockRule, "The headstock positioning rule should exist");
+  assert.doesNotMatch(
+    headstockRule,
+    /top:\s*-/,
+    "The headstock should not be clipped by a negative top offset",
+  );
+});
+
 test("decorative illustrations are static, hidden from assistive technology, and non-interactive", () => {
   const component = read(
     "src/components/ui/decorative-illustration.tsx",
