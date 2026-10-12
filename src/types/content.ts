@@ -1,11 +1,12 @@
 import type { ScreenshotImage } from "@/types/screenshot";
 
 export type Project = {
+  id: "guitarsense" | "nexora" | "grade-watcher";
   name: string;
   eyebrow: string;
   summary: string;
-  tags: string[];
-  proofPoints: string[];
+  tags: readonly string[];
+  proofPoints: readonly string[];
   href: string | null;
   featured: boolean;
   image?: ScreenshotImage;
@@ -17,19 +18,20 @@ export type ExperienceEntry = {
   role: string;
   date: string | null;
   summary: string;
-  highlights: string[];
-  technologies: string[];
+  highlights: readonly string[];
+  technologies: readonly string[];
 };
 
 export type ToolkitGroup = {
+  id: "languages" | "frontend" | "backend-data" | "desktop-systems" | "audio-automation";
   title: string;
-  items: string[];
+  items: readonly string[];
 };
 
 export type OtherWorkItem = {
   name: string;
   summary: string;
-  tags: string[];
+  tags: readonly string[];
 };
 
 export type CaseStudyFeature = {

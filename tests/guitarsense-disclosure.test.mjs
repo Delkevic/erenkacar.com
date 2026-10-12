@@ -1,3 +1,4 @@
+import { loadSource } from "./helpers/load-source.mjs";
 import assert from "node:assert/strict";
 import { createHash } from "node:crypto";
 import { existsSync, readFileSync, readdirSync } from "node:fs";
@@ -69,15 +70,19 @@ test("GuitarSense public copy, metadata and image descriptions omit unreleased i
     JSON.stringify(featuredProject),
     read("src/data/case-study.ts"),
     read("src/data/guitarsense-images.ts"),
-    read("src/app/projects/guitarsense/page.tsx"),
+    read("src/components/views/guitarsense.tsx"),
     read("src/app/projects/guitarsense/opengraph-image.tsx"),
     read("src/components/sections/featured-project.tsx"),
+    JSON.stringify(loadSource("src/app/(en)/projects/guitarsense/page.tsx").metadata),
+    JSON.stringify(loadSource("src/i18n/en.ts").english.caseStudies.guitarsense),
+    JSON.stringify(loadSource("src/i18n/en.ts").english.social.guitarsense),
   ].join("\n");
   assert.doesNotMatch(publicSource, forbiddenDetails);
   assert.doesNotMatch(publicSource, /href=["']#["']|["']use client["']/);
-  const page = read("src/app/projects/guitarsense/page.tsx");
-  assert.match(page, /export default function GuitarSensePage/);
-  assert.match(page, /canonical:\s*"\/projects\/guitarsense"/);
+  const page = read("src/components/views/guitarsense.tsx");
+  assert.match(page, /export function GuitarSenseView/);
+  assert.match(read("src/app/(en)/projects/guitarsense/page.tsx"), /<GuitarSenseView dictionary=\{english\}/);
+  assert.equal(loadSource("src/app/(en)/projects/guitarsense/page.tsx").metadata.alternates.canonical, "https://www.erenkacar.com/projects/guitarsense");
   assert.match(page, /guitarSenseCaseStudy\.technologies\.map/);
 });
 
@@ -98,7 +103,7 @@ test("only approved GuitarSense screenshots remain public with valid references 
     assert.equal(createHash("sha256").update(binary).digest("hex"), expectedHashes[image.src.split("/").at(-1)]);
     assert.ok(image.alt.trim());
   }
-  const source = [read("src/components/sections/featured-project.tsx"), read("src/app/projects/guitarsense/page.tsx")].join("\n");
+  const source = [read("src/components/sections/featured-project.tsx"), read("src/components/views/guitarsense.tsx")].join("\n");
   for (const [, key] of source.matchAll(/guitarSenseImages\.(\w+)/g)) {
     assert.ok(images[key], `${key} must be registered`);
   }

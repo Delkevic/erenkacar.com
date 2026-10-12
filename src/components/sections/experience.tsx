@@ -1,9 +1,13 @@
+import { labelWithName } from "@/i18n/format";
+import type { DictionaryProps } from "@/i18n/schema";
 import { Container } from "@/components/ui/container";
 import { InterfaceIcon } from "@/components/ui/interface-icon";
 import { SectionHeader } from "@/components/ui/section-header";
-import { experience } from "@/data/experience";
 
-export function Experience() {
+export function Experience({ dictionary }: DictionaryProps) {
+  const copy = dictionary.home.experience;
+  const { experience } = dictionary.content;
+
   return (
     <section
       className="section section--bordered"
@@ -13,8 +17,8 @@ export function Experience() {
       <Container>
         <div id="experience-title">
           <SectionHeader
-            eyebrow="03 / Experience"
-            title="Building workflows and learning systems from the inside."
+            eyebrow={copy.eyebrow}
+            title={copy.title}
           />
         </div>
         <ol className="timeline">
@@ -39,7 +43,7 @@ export function Experience() {
                 </ul>
                 <ul
                   className="tag-list"
-                  aria-label={`Technologies used at ${entry.organization}`}
+                  aria-label={labelWithName(dictionary.shared.experienceTechnologies, entry.organization)}
                 >
                   {entry.technologies.map((technology) => (
                     <li className="tag" key={technology}>

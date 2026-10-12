@@ -1,49 +1,32 @@
-import type { Metadata } from "next";
+import type { DictionaryProps } from "@/i18n/schema";
 import Link from "next/link";
 import { SiteFooter } from "@/components/layout/site-footer";
 import { SiteHeader } from "@/components/layout/site-header";
 import { AutomationFlow } from "@/components/ui/automation-flow";
 import { Container } from "@/components/ui/container";
-import { gradeWatcherCaseStudy } from "@/data/grade-watcher";
 
-const description =
-  "A private Playwright automation project for monitoring academic result changes and sending Telegram notifications.";
+export function GradeWatcherView({ dictionary }: DictionaryProps) {
+  const copy = dictionary.caseStudies.gradeWatcher;
+  const common = dictionary.caseStudies.common;
+  const { gradeWatcherCaseStudy } = dictionary.content;
 
-export const metadata: Metadata = {
-  title: "Grade Watcher",
-  description,
-  alternates: {
-    canonical: "/projects/grade-watcher",
-  },
-  openGraph: {
-    title: "Grade Watcher — Eren Kaçar",
-    description,
-    url: "/projects/grade-watcher",
-  },
-};
-
-export default function GradeWatcherPage() {
   return (
     <>
-      <SiteHeader />
+      <SiteHeader dictionary={dictionary} page="grade-watcher" />
       <main
         id="main-content"
         className="case-study case-study--grade-watcher"
       >
         <Container>
           <header className="case-hero">
-            <Link className="text-link back-link" href="/#work">
+            <Link className="text-link back-link" href={dictionary.links.work}>
               <span aria-hidden="true">←</span>
-              Back to selected work
+              {common.back}
             </Link>
-            <p className="eyebrow">BROWSER AUTOMATION</p>
-            <h1>Grade Watcher</h1>
-            <p className="case-hero__intro">
-              A private automation tool that monitors changes in academic
-              results and sends Telegram notifications when new results are
-              detected.
-            </p>
-            <ul className="case-facts" aria-label="Project facts">
+            <p className="eyebrow">{copy.eyebrow}</p>
+            <h1>{copy.name}</h1>
+            <p className="case-hero__intro">{copy.introduction}</p>
+            <ul className="case-facts" aria-label={common.facts}>
               {gradeWatcherCaseStudy.facts.map((fact) => (
                 <li key={fact}>{fact}</li>
               ))}
@@ -52,26 +35,26 @@ export default function GradeWatcherPage() {
 
           <AutomationFlow
             stages={gradeWatcherCaseStudy.architecture}
-            label="Grade Watcher automation architecture"
+            label={copy.architectureLabel}
           />
 
           <div className="case-sections grade-watcher-sections">
             <section className="case-section">
-              <h2>Overview</h2>
+              <h2>{common.overview}</h2>
               <div className="case-section__content">
                 <p>{gradeWatcherCaseStudy.overview}</p>
               </div>
             </section>
 
             <section className="case-section">
-              <h2>My role</h2>
+              <h2>{common.role}</h2>
               <div className="case-section__content">
                 <p>{gradeWatcherCaseStudy.role}</p>
               </div>
             </section>
 
             <section className="case-section case-section--full">
-              <h2>How it works</h2>
+              <h2>{copy.workflow}</h2>
               <ol className="grade-process">
                 {gradeWatcherCaseStudy.workflow.map((step, index) => (
                   <li key={step.title}>
@@ -88,7 +71,7 @@ export default function GradeWatcherPage() {
             </section>
 
             <section className="case-section case-section--full">
-              <h2>Engineering decisions</h2>
+              <h2>{common.decisions}</h2>
               <div className="case-section__content challenge-grid">
                 {gradeWatcherCaseStudy.decisions.map((decision) => (
                   <article className="challenge-card" key={decision.title}>
@@ -100,7 +83,7 @@ export default function GradeWatcherPage() {
             </section>
 
             <section className="case-section">
-              <h2>Current status</h2>
+              <h2>{copy.status}</h2>
               <div className="case-section__content grade-status">
                 <ul className="results-list">
                   {gradeWatcherCaseStudy.status.map((item) => (
@@ -113,7 +96,7 @@ export default function GradeWatcherPage() {
           </div>
         </Container>
       </main>
-      <SiteFooter />
+      <SiteFooter dictionary={dictionary} />
     </>
   );
 }

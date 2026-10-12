@@ -24,8 +24,8 @@ test("the interface icon system stays inline, decorative, and server-rendered", 
 });
 
 test("case-study pages expose restrained project accent modifiers", () => {
-  const guitarSensePage = read("src/app/projects/guitarsense/page.tsx");
-  const nexoraPage = read("src/app/projects/nexora/page.tsx");
+  const guitarSensePage = read("src/components/views/guitarsense.tsx");
+  const nexoraPage = read("src/components/views/nexora.tsx");
   const styles = read("src/app/globals.css");
 
   assert.match(guitarSensePage, /case-study--guitarsense/);
@@ -37,10 +37,10 @@ test("case-study pages expose restrained project accent modifiers", () => {
 
 test("visual polish preserves server components and introduces no fake links", () => {
   const files = [
-    "src/app/page.tsx",
-    "src/app/projects/guitarsense/page.tsx",
-    "src/app/projects/nexora/page.tsx",
-    "src/app/projects/grade-watcher/page.tsx",
+    "src/components/views/home.tsx",
+    "src/components/views/guitarsense.tsx",
+    "src/components/views/nexora.tsx",
+    "src/components/views/grade-watcher.tsx",
     "src/components/layout/site-header.tsx",
     "src/components/sections/contact.tsx",
   ];

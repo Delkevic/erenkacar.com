@@ -1,45 +1,34 @@
-import type { Metadata } from "next";
+import type { DictionaryProps } from "@/i18n/schema";
 import Link from "next/link";
 import { SiteFooter } from "@/components/layout/site-footer";
 import { SiteHeader } from "@/components/layout/site-header";
 import { Container } from "@/components/ui/container";
 import { ScreenshotFigure } from "@/components/ui/screenshot-figure";
-import { guitarSenseCaseStudy } from "@/data/case-study";
-import { guitarSenseImages } from "@/data/guitarsense-images";
 
-export const metadata: Metadata = {
-  title: "GuitarSense",
-  description: guitarSenseCaseStudy.introduction,
-  alternates: {
-    canonical: "/projects/guitarsense",
-  },
-  openGraph: {
-    title: "GuitarSense — Eren Kaçar",
-    description: guitarSenseCaseStudy.introduction,
-    url: "/projects/guitarsense",
-  },
-};
+export function GuitarSenseView({ dictionary }: DictionaryProps) {
+  const copy = dictionary.caseStudies.guitarsense;
+  const common = dictionary.caseStudies.common;
+  const { guitarSenseCaseStudy, guitarSenseImages } = dictionary.content;
 
-export default function GuitarSensePage() {
   return (
     <>
-      <SiteHeader />
+      <SiteHeader dictionary={dictionary} page="guitarsense" />
       <main
         id="main-content"
         className="case-study case-study--guitarsense"
       >
         <Container>
           <header className="case-hero">
-            <Link className="text-link back-link" href="/#work">
+            <Link className="text-link back-link" href={dictionary.links.work}>
               <span aria-hidden="true">←</span>
-              Back to selected work
+              {common.back}
             </Link>
-            <p className="eyebrow">Flagship project</p>
-            <h1>GuitarSense</h1>
+            <p className="eyebrow">{copy.eyebrow}</p>
+            <h1>{copy.name}</h1>
             <p className="case-hero__intro">
               {guitarSenseCaseStudy.introduction}
             </p>
-            <ul className="case-facts" aria-label="Project facts">
+            <ul className="case-facts" aria-label={common.facts}>
               {guitarSenseCaseStudy.facts.map((fact) => (
                 <li key={fact}>{fact}</li>
               ))}
@@ -55,21 +44,21 @@ export default function GuitarSensePage() {
 
           <div className="case-sections">
             <section className="case-section">
-              <h2>Overview</h2>
+              <h2>{common.overview}</h2>
               <div className="case-section__content">
                 <p>{guitarSenseCaseStudy.overview}</p>
               </div>
             </section>
 
             <section className="case-section">
-              <h2>My role</h2>
+              <h2>{common.role}</h2>
               <div className="case-section__content">
                 <p>{guitarSenseCaseStudy.role}</p>
               </div>
             </section>
 
             <section className="case-section case-section--full">
-              <h2>Core capabilities</h2>
+              <h2>{common.capabilities}</h2>
               <div className="case-section__content guitarsense-capabilities">
                 <div className="guitarsense-capabilities__cards">
                   {guitarSenseCaseStudy.capabilities.map((capability) => (
@@ -88,13 +77,13 @@ export default function GuitarSensePage() {
             </section>
 
             <section className="case-section case-section--full">
-              <h2>Engineering highlights</h2>
+              <h2>{copy.highlights}</h2>
               <div className="case-section__content challenge-grid">
                 {guitarSenseCaseStudy.highlights.map((highlight) => (
                   <article className="challenge-card" key={highlight.title}>
                     <h3>{highlight.title}</h3>
                     <p>{highlight.body}</p>
-                    {highlight.qualification ? (
+                    {"qualification" in highlight && highlight.qualification ? (
                       <p className="challenge-card__qualification">
                         {highlight.qualification}
                       </p>
@@ -105,9 +94,9 @@ export default function GuitarSensePage() {
             </section>
 
             <section className="case-section">
-              <h2>Technologies</h2>
+              <h2>{copy.technologies}</h2>
               <div className="case-section__content">
-                <ul className="tag-list" aria-label="GuitarSense technologies">
+                <ul className="tag-list" aria-label={copy.technologiesLabel}>
                   {guitarSenseCaseStudy.technologies.map((technology) => (
                     <li className="tag" key={technology}>{technology}</li>
                   ))}
@@ -116,7 +105,7 @@ export default function GuitarSensePage() {
             </section>
 
             <section className="case-section">
-              <h2>Results</h2>
+              <h2>{copy.results}</h2>
               <div className="case-section__content">
                 <ul className="results-list">
                   {guitarSenseCaseStudy.results.map((result) => (
@@ -128,7 +117,7 @@ export default function GuitarSensePage() {
           </div>
         </Container>
       </main>
-      <SiteFooter />
+      <SiteFooter dictionary={dictionary} />
     </>
   );
 }

@@ -1,17 +1,12 @@
 import type { MetadataRoute } from "next";
-import { siteConfig } from "@/config/site";
-
-const routes = [
-  "/",
-  "/projects/guitarsense",
-  "/projects/nexora",
-  "/projects/grade-watcher",
-] as const;
+import { enabledLocales, pageIds } from "@/i18n/routes";
+import { createLanguageAlternates } from "@/i18n/metadata";
 
 export default function sitemap(): MetadataRoute.Sitemap {
-  return routes.map((route) => ({
-    url: new URL(route, siteConfig.siteUrl).toString(),
-    changeFrequency: route === "/" ? "monthly" : "yearly",
-    priority: route === "/" ? 1 : 0.7,
-  }));
+  return pageIds.flatMap((page) => enabledLocales.map((locale) => ({
+    url: createLanguageAlternates(page)[locale],
+    changeFrequency: page === "home" ? "monthly" as const : "yearly" as const,
+    priority: page === "home" ? 1 : 0.7,
+    alternates: { languages: createLanguageAlternates(page) },
+  })));
 }

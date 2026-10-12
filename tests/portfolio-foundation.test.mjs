@@ -1,3 +1,4 @@
+import { renderSource } from "./helpers/load-source.mjs";
 import assert from "node:assert/strict";
 import { existsSync, readFileSync } from "node:fs";
 import test from "node:test";
@@ -5,8 +6,9 @@ import test from "node:test";
 const read = (path) => readFileSync(path, "utf8");
 
 const sectionBetween = (source, heading, nextHeading) => {
-  const start = source.indexOf(`<h2>${heading}</h2>`);
-  const end = source.indexOf(`<h2>${nextHeading}</h2>`, start + 1);
+  const headings = { "Overview": "common.overview", "My role": "common.role", "Core capabilities": "common.capabilities", "Engineering highlights": "copy.highlights", "Technologies": "copy.technologies", "Results": "copy.results" };
+  const start = source.indexOf(`<h2>{${headings[heading]}}</h2>`);
+  const end = source.indexOf(`<h2>{${headings[nextHeading]}}</h2>`, start + 1);
 
   assert.ok(start >= 0, `${heading} section should exist`);
   assert.ok(end > start, `${nextHeading} should follow ${heading}`);
@@ -25,7 +27,7 @@ const registryEntry = (source, image) => {
 };
 
 test("the homepage composes the required sections in order", () => {
-  const page = read("src/app/page.tsx");
+  const page = read("src/components/views/home.tsx");
   const sections = [
     "Hero",
     "FeaturedProject",
@@ -47,7 +49,7 @@ test("the homepage composes the required sections in order", () => {
 });
 
 test("the hero uses the reviewed headline, supporting copy, and focus", () => {
-  const hero = read("src/components/sections/hero.tsx");
+  const hero = renderSource("src/components/sections/hero.tsx", "Hero");
 
   assert.match(hero, /Software Engineer<\/p>/);
   assert.match(
@@ -128,7 +130,7 @@ test("reviewed experience keeps Bimser Synergy central and dates factual", () =>
 });
 
 test("the GuitarSense case study qualifies latency and preserves engineering evidence", () => {
-  const page = read("src/app/projects/guitarsense/page.tsx");
+  const page = read("src/components/views/guitarsense.tsx");
   const content = read("src/data/case-study.ts");
 
   assert.match(page, /guitarSenseImages\.practiceView/);
@@ -140,7 +142,7 @@ test("the GuitarSense case study qualifies latency and preserves engineering evi
 
 test("public content no longer exposes provisional template wording", () => {
   const files = [
-    "src/app/projects/guitarsense/page.tsx",
+    "src/components/views/guitarsense.tsx",
     "src/components/sections/featured-project.tsx",
     "src/components/sections/selected-projects.tsx",
     "src/components/sections/experience.tsx",
@@ -162,8 +164,8 @@ test("public content no longer exposes provisional template wording", () => {
 
 test("pages contain no dead hash links or unnecessary client boundaries", () => {
   const files = [
-    "src/app/page.tsx",
-    "src/app/projects/guitarsense/page.tsx",
+    "src/components/views/home.tsx",
+    "src/components/views/guitarsense.tsx",
     "src/components/layout/site-header.tsx",
     "src/components/sections/contact.tsx",
   ];
@@ -226,7 +228,7 @@ test("the production GuitarSense Library asset has matching PNG dimensions", () 
 test("GuitarSense screenshot mappings and launch readiness stay explicit", () => {
   const registry = read("src/data/guitarsense-images.ts");
   const homepage = read("src/components/sections/featured-project.tsx");
-  const caseStudy = read("src/app/projects/guitarsense/page.tsx");
+  const caseStudy = read("src/components/views/guitarsense.tsx");
 
   assert.match(homepage, /guitarSenseImages\.library/);
   for (const image of [
@@ -258,7 +260,7 @@ test("GuitarSense screenshot mappings and launch readiness stay explicit", () =>
 });
 
 test("the GuitarSense case study keeps its reviewed section order", () => {
-  const page = read("src/app/projects/guitarsense/page.tsx");
+  const rendered = renderSource("src/components/views/guitarsense.tsx", "GuitarSenseView");
   const headings = [
     "Overview",
     "My role",
@@ -270,14 +272,14 @@ test("the GuitarSense case study keeps its reviewed section order", () => {
   let previousIndex = -1;
 
   for (const heading of headings) {
-    const currentIndex = page.indexOf(`<h2>${heading}</h2>`);
+    const currentIndex = rendered.indexOf(`<h2>${heading}</h2>`);
     assert.ok(currentIndex > previousIndex, `${heading} should follow the previous section`);
     previousIndex = currentIndex;
   }
 });
 
 test("Core capabilities presents only three high-level groups with the preset screenshot", () => {
-  const page = read("src/app/projects/guitarsense/page.tsx");
+  const page = read("src/components/views/guitarsense.tsx");
   const content = read("src/data/case-study.ts");
   const capabilities = sectionBetween(page, "Core capabilities", "Engineering highlights");
 
@@ -294,7 +296,7 @@ test("Core capabilities presents only three high-level groups with the preset sc
 });
 
 test("GuitarSense retains only the approved case-study screenshots", () => {
-  const page = read("src/app/projects/guitarsense/page.tsx");
+  const page = read("src/components/views/guitarsense.tsx");
 
   for (const image of ["practiceView", "presetEditor"]) {
     assert.equal(page.match(new RegExp(`guitarSenseImages\\.${image}`, "g"))?.length, 1);
@@ -303,7 +305,7 @@ test("GuitarSense retains only the approved case-study screenshots", () => {
 });
 
 test("Engineering highlights keeps a regular card grid and visible latency qualification", () => {
-  const page = read("src/app/projects/guitarsense/page.tsx");
+  const page = read("src/components/views/guitarsense.tsx");
   const highlights = sectionBetween(page, "Engineering highlights", "Technologies");
 
   assert.match(highlights, /challenge-grid/);
@@ -329,7 +331,7 @@ test("GuitarSense screenshot alt text remains descriptive and reviewed", () => {
 test("rendered GuitarSense media uses Next Image without old placeholders", () => {
   const figure = read("src/components/ui/screenshot-figure.tsx");
   const homepage = read("src/components/sections/featured-project.tsx");
-  const caseStudy = read("src/app/projects/guitarsense/page.tsx");
+  const caseStudy = read("src/components/views/guitarsense.tsx");
   const source = [homepage, caseStudy].join("\n");
 
   assert.match(figure, /from "next\/image"/);

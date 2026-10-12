@@ -1,3 +1,4 @@
+import type { DictionaryProps } from "@/i18n/schema";
 import { SiteFooter } from "@/components/layout/site-footer";
 import { SiteHeader } from "@/components/layout/site-header";
 import { About } from "@/components/sections/about";
@@ -10,7 +11,7 @@ import { SelectedProjects } from "@/components/sections/selected-projects";
 import { Toolkit } from "@/components/sections/toolkit";
 import { siteConfig } from "@/config/site";
 
-export default function Home() {
+export function HomeView({ dictionary }: DictionaryProps) {
   const structuredData = {
     "@context": "https://schema.org",
     "@graph": [
@@ -18,19 +19,19 @@ export default function Home() {
         "@type": "Person",
         name: siteConfig.name,
         url: siteConfig.siteUrl,
-        jobTitle: "Software Engineer",
+        jobTitle: dictionary.metadata.personJobTitle,
         email: siteConfig.contactUrl,
         sameAs: [siteConfig.githubUrl, siteConfig.linkedinUrl],
         alumniOf: {
           "@type": "CollegeOrUniversity",
-          name: "Trakya University",
+          name: dictionary.metadata.alumni,
         },
       },
       {
         "@type": "WebSite",
         name: siteConfig.name,
-        url: siteConfig.siteUrl,
-        inLanguage: "en",
+        url: dictionary.locale === "en" ? siteConfig.siteUrl : `${siteConfig.siteUrl}/tr`,
+        inLanguage: dictionary.locale,
       },
     ],
   };
@@ -43,18 +44,18 @@ export default function Home() {
           __html: JSON.stringify(structuredData).replace(/</g, "\\u003c"),
         }}
       />
-      <SiteHeader />
+      <SiteHeader dictionary={dictionary} page="home" />
       <main id="main-content">
-        <Hero />
-        <FeaturedProject />
-        <SelectedProjects />
-        <Experience />
-        <Toolkit />
-        <About />
-        <OtherWork />
-        <Contact />
+        <Hero dictionary={dictionary} />
+        <FeaturedProject dictionary={dictionary} />
+        <SelectedProjects dictionary={dictionary} />
+        <Experience dictionary={dictionary} />
+        <Toolkit dictionary={dictionary} />
+        <About dictionary={dictionary} />
+        <OtherWork dictionary={dictionary} />
+        <Contact dictionary={dictionary} />
       </main>
-      <SiteFooter />
+      <SiteFooter dictionary={dictionary} />
     </>
   );
 }

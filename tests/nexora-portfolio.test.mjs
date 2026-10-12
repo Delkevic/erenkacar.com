@@ -1,3 +1,4 @@
+import { loadSource, renderSource } from "./helpers/load-source.mjs";
 import assert from "node:assert/strict";
 import { existsSync, readFileSync } from "node:fs";
 import test from "node:test";
@@ -54,7 +55,7 @@ test("the Nexora homepage card uses its real feed image and detail route", () =>
   assert.match(homeFeed, /replacementReason:\s*null/);
   assert.doesNotMatch(registry, /ana-ekran\.jpg/);
   assert.match(projectCard, /<ScreenshotFigure/);
-  assert.match(projectCard, /View project/);
+  assert.match(renderSource("src/components/views/home.tsx", "HomeView"), /View project/);
   assert.match(projectCard, /from "next\/link"/);
 });
 
@@ -77,13 +78,12 @@ test("Nexora technologies use Firebase and Gemini without WebSocket claims", () 
 });
 
 test("the concise Nexora case study covers the supplied product facts", () => {
-  const routePath = "src/app/projects/nexora/page.tsx";
+  const routePath = "src/components/views/nexora.tsx";
 
-  assert.ok(existsSync(routePath), "The /projects/nexora route should exist");
+  assert.ok(existsSync("src/app/(en)/projects/nexora/page.tsx"), "The /projects/nexora route should exist");
 
   const page = read(routePath);
-  const content = read("src/data/nexora-case-study.ts");
-  const source = `${page}\n${content}`;
+  const source = renderSource(routePath, "NexoraView").match(/<main[^]*?<\/main>/)[0];
 
   assert.match(source, /FULL-STACK SOCIAL PLATFORM/);
   assert.match(source, /Secure account flows/);
@@ -101,18 +101,18 @@ test("the concise Nexora case study covers the supplied product facts", () => {
 });
 
 test("the Nexora route exposes factual metadata with a route social preview", () => {
-  const page = read("src/app/projects/nexora/page.tsx");
+  const metadata = loadSource("src/app/(en)/projects/nexora/page.tsx").metadata;
 
-  assert.match(page, /title:\s*"Nexora"/);
+  assert.equal(metadata.title, "Nexora");
   assert.match(
-    page,
+    metadata.description,
     /A full-stack social platform built with React, Go, MySQL, Firebase and Gemini-assisted content experiences\./,
   );
   assert.ok(existsSync("src/app/projects/nexora/opengraph-image.tsx"));
 });
 
 test("the Nexora case study renders three distinct reviewed screenshots", () => {
-  const page = read("src/app/projects/nexora/page.tsx");
+  const page = read("src/components/views/nexora.tsx");
   const registry = read("src/data/nexora-images.ts");
   const renderedKeys = [
     ...page.matchAll(/image=\{nexoraImages\.(?<key>\w+)\}/g),
@@ -141,7 +141,7 @@ test("all rendered Nexora screenshots are production-ready", () => {
   assert.doesNotMatch(registry, /replaceBeforeLaunch:\s*true/);
 
   const publicSource = [
-    read("src/app/projects/nexora/page.tsx"),
+    read("src/components/views/nexora.tsx"),
     read("src/components/ui/project-card.tsx"),
   ].join("\n");
 

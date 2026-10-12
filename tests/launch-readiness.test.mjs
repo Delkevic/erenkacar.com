@@ -1,3 +1,4 @@
+import { loadSource, renderSource } from "./helpers/load-source.mjs";
 import assert from "node:assert/strict";
 import { existsSync, readdirSync, readFileSync } from "node:fs";
 import test from "node:test";
@@ -8,26 +9,28 @@ const projectRoutes = [
   {
     name: "GuitarSense",
     path: "/projects/guitarsense",
-    source: "src/app/projects/guitarsense/page.tsx",
+    source: "src/app/(en)/projects/guitarsense/page.tsx",
     socialImage: "src/app/projects/guitarsense/opengraph-image.tsx",
   },
   {
     name: "Nexora",
     path: "/projects/nexora",
-    source: "src/app/projects/nexora/page.tsx",
+    source: "src/app/(en)/projects/nexora/page.tsx",
     socialImage: "src/app/projects/nexora/opengraph-image.tsx",
   },
   {
     name: "Grade Watcher",
     path: "/projects/grade-watcher",
-    source: "src/app/projects/grade-watcher/page.tsx",
+    source: "src/app/(en)/projects/grade-watcher/page.tsx",
     socialImage: "src/app/projects/grade-watcher/opengraph-image.tsx",
   },
 ];
 
 test("root metadata defines the reviewed production identity and sharing defaults", () => {
-  const layout = read("src/app/layout.tsx");
+  const layout = read("src/app/(en)/layout.tsx");
   const config = read("src/config/site.ts");
+  const { english } = loadSource("src/i18n/en.ts");
+  const metadata = loadSource("src/i18n/metadata.ts").createRootMetadata(english);
 
   assert.match(config, /siteUrl:\s*"https:\/\/www\.erenkacar\.com"/);
   assert.match(config, /displayDomain:\s*"erenkacar\.com"/);
@@ -36,59 +39,43 @@ test("root metadata defines the reviewed production identity and sharing default
     config,
     /Software engineer building end-to-end desktop, web and real-time products, with work spanning product architecture, automation, audio systems, performance and security\./,
   );
-  assert.match(layout, /metadataBase:\s*new URL\(siteConfig\.siteUrl\)/);
-  assert.match(layout, /url:\s*siteConfig\.siteUrl/);
-  assert.match(layout, /default:\s*"Eren Kaçar — Software Engineer"/);
-  assert.match(layout, /template:\s*"%s — Eren Kaçar"/);
-  assert.match(layout, /authors:\s*\[\{\s*name:\s*siteConfig\.name/);
-  assert.match(layout, /creator:\s*siteConfig\.name/);
-  assert.match(layout, /applicationName:\s*siteConfig\.name/);
-  assert.match(layout, /category:\s*"technology"/);
-  assert.match(layout, /canonical:\s*"\/"/);
-  assert.match(layout, /openGraph:\s*\{/);
-  assert.match(layout, /locale:\s*"en_US"/);
-  assert.match(layout, /twitter:\s*\{/);
-  assert.match(layout, /card:\s*"summary_large_image"/);
-  assert.match(layout, /robots:\s*\{[\s\S]*index:\s*true[\s\S]*follow:\s*true/);
+  assert.match(layout, /createRootMetadata\(english\)/);
+  assert.equal(metadata.metadataBase.href, "https://www.erenkacar.com/");
+  assert.equal(metadata.openGraph.url, "https://www.erenkacar.com");
+  assert.deepEqual(metadata.title, { default: "Eren Kaçar — Software Engineer", template: "%s — Eren Kaçar" });
+  assert.deepEqual(metadata.authors, [{ name: "Eren Kaçar", url: "https://www.erenkacar.com" }]);
+  assert.equal(metadata.creator, "Eren Kaçar");
+  assert.equal(metadata.applicationName, "Eren Kaçar");
+  assert.equal(metadata.category, "technology");
+  assert.equal(metadata.alternates.canonical, "https://www.erenkacar.com/");
+  assert.equal(metadata.openGraph.locale, "en_US");
+  assert.equal(metadata.twitter.card, "summary_large_image");
+  assert.deepEqual(metadata.robots, { index: true, follow: true });
 });
 
 test("project metadata uses short templated titles and route-specific canonicals", () => {
   for (const route of projectRoutes) {
-    const source = read(route.source);
-    const escapedName = route.name.replace(/[.*+?^${}()|[\]\\]/g, "\\$&");
-    const escapedPath = route.path.replaceAll("/", "\\/");
-
-    assert.match(
-      source,
-      new RegExp(
-        `export const metadata:[\\s\\S]*?title:\\s*"${escapedName}"`,
-      ),
-    );
-    assert.match(
-      source,
-      new RegExp(`canonical:\\s*"${escapedPath}"`),
-    );
-    assert.doesNotMatch(
-      source,
-      new RegExp(
-        `absolute:\\s*"${escapedName} — Eren Kaçar(?: — Eren Kaçar)?"`,
-      ),
-    );
+    const metadata = loadSource(route.source).metadata;
+    assert.equal(metadata.title, route.name);
+    assert.equal(metadata.alternates.canonical, `https://www.erenkacar.com${route.path}`);
+    assert.equal(typeof metadata.title, "string", "Project title must remain templated, rather than absolute");
   }
 });
 
 test("homepage renders safe Person and WebSite JSON-LD from centralized config", () => {
-  const home = read("src/app/page.tsx");
+  const home = read("src/components/views/home.tsx");
 
   assert.match(home, /type="application\/ld\+json"/);
   assert.match(home, /"@type":\s*"Person"/);
   assert.match(home, /"@type":\s*"WebSite"/);
-  assert.match(home, /jobTitle:\s*"Software Engineer"/);
+  const data = JSON.parse(renderSource("src/components/views/home.tsx", "HomeView").match(/<script type="application\/ld\+json">([^]*?)<\/script>/)[1]);
+  assert.equal(data["@graph"][0].jobTitle, "Software Engineer");
   assert.match(home, /email:\s*siteConfig\.contactUrl/);
   assert.match(home, /siteConfig\.githubUrl/);
   assert.match(home, /siteConfig\.linkedinUrl/);
-  assert.equal(home.match(/url:\s*siteConfig\.siteUrl/g)?.length, 2);
-  assert.match(home, /name:\s*"Trakya University"/);
+  assert.equal(data["@graph"][0].url, "https://www.erenkacar.com");
+  assert.equal(data["@graph"][1].url, "https://www.erenkacar.com");
+  assert.equal(data["@graph"][0].alumniOf.name, "Trakya University");
   assert.match(home, /\.replace\(\/<\/g,\s*"\\\\u003c"\)/);
   assert.doesNotMatch(home, /SearchAction|telephone|address|salary/);
 });
@@ -108,7 +95,8 @@ test("App Router icon and social image conventions cover the site and projects",
   const icon = read("src/app/icon.svg");
   const appleIcon = read("src/app/apple-icon.tsx");
   const socialCard = read("src/components/metadata/social-card.tsx");
-  const rootSocial = read("src/app/opengraph-image.tsx");
+  const rootSocial = loadSource("src/app/opengraph-image.tsx");
+  const { english } = loadSource("src/i18n/en.ts");
 
   assert.match(icon, /viewBox="0 0 40 46"/);
   assert.match(icon, /data-initials="EK"/);
@@ -116,15 +104,16 @@ test("App Router icon and social image conventions cover the site and projects",
   assert.match(appleIcon, /height:\s*180/);
   assert.match(socialCard, /width:\s*1200/);
   assert.match(socialCard, /height:\s*630/);
-  assert.match(socialCard, /Desktop · Web · Real-time systems/);
+  assert.equal(english.social.supportingLine, "Desktop · Web · Real-time systems");
+  assert.match(socialCard, /copy\.supportingLine/);
   assert.match(socialCard, /\{siteConfig\.displayDomain\}/);
   assert.doesNotMatch(socialCard, />www\.erenkacar\.com</);
-  assert.match(rootSocial, /Eren Kaçar/);
-  assert.match(rootSocial, /Software Engineer/);
+  assert.match(rootSocial.alt, /Eren Kaçar/);
+  assert.match(rootSocial.alt, /Software Engineer/);
 
   for (const route of projectRoutes) {
-    const socialImage = read(route.socialImage);
-    assert.match(socialImage, new RegExp(route.name));
+    const socialImage = loadSource(route.socialImage);
+    assert.match(socialImage.alt, new RegExp(route.name));
   }
 });
 
@@ -151,22 +140,24 @@ test("sitemap, robots, and manifest expose only the intended production surface"
   const sitemap = read("src/app/sitemap.ts");
   const robots = read("src/app/robots.ts");
   const manifest = read("src/app/manifest.ts");
-  const routeList =
-    sitemap.match(/const routes = \[(?<routes>[\s\S]*?)\] as const/)?.groups
-      ?.routes ?? "";
-  const routes = [...routeList.matchAll(/"([^"]+)"/g)].map((match) => match[1]);
+  const entries = loadSource("src/app/sitemap.ts").default();
+  const routes = entries.map((entry) => new URL(entry.url).pathname).sort();
 
   assert.deepEqual(routes, [
     "/",
     "/projects/guitarsense",
     "/projects/nexora",
     "/projects/grade-watcher",
-  ]);
-  assert.match(sitemap, /siteConfig\.siteUrl/);
+    "/tr",
+    "/tr/projects/guitarsense",
+    "/tr/projects/nexora",
+    "/tr/projects/grade-watcher",
+  ].sort());
+  assert.ok(entries.every((entry) => new URL(entry.url).origin === "https://www.erenkacar.com"));
   assert.doesNotMatch(sitemap, /resume|images|lastModified/);
   assert.match(robots, /allow:\s*"\/"/);
   assert.match(robots, /`\$\{siteConfig\.siteUrl\}\/sitemap\.xml`/);
-  assert.match(manifest, /name:\s*"Eren Kaçar — Software Engineer"/);
+  assert.equal(loadSource("src/app/manifest.ts").default().name, "Eren Kaçar — Software Engineer");
   assert.match(manifest, /short_name:\s*siteConfig\.name/);
   assert.match(manifest, /background_color:\s*"#0a1017"/);
   assert.match(manifest, /theme_color:\s*"#70b6ab"/);
@@ -175,15 +166,16 @@ test("sitemap, robots, and manifest expose only the intended production surface"
 });
 
 test("the custom server-rendered not-found page offers real recovery links", () => {
-  const path = "src/app/not-found.tsx";
+  const path = "src/components/views/not-found.tsx";
   assert.ok(existsSync(path), "Root not-found page should exist");
 
   const source = read(path);
-  assert.match(source, /<SiteHeader \/>/);
-  assert.match(source, /<SiteFooter \/>/);
-  assert.match(source, /<h1[^>]*>[\s\S]*404[\s\S]*Page not found[\s\S]*<\/h1>/);
-  assert.match(source, /href="\/"/);
-  assert.match(source, /href="\/#work"/);
+  const rendered = renderSource(path, "NotFoundView");
+  assert.match(source, /<SiteHeader dictionary=\{dictionary\} page="home" \/>/);
+  assert.match(source, /<SiteFooter dictionary=\{dictionary\} \/>/);
+  assert.match(rendered, /<h1[^>]*>[\s\S]*404[\s\S]*Page not found[\s\S]*<\/h1>/);
+  assert.match(rendered, /href="\/"/);
+  assert.match(rendered, /href="\/#work"/);
   assert.doesNotMatch(source, /["']use client["']|href=["']#["']/);
 });
 

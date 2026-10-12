@@ -1,9 +1,10 @@
 import type { MetadataRoute } from "next";
 import { siteConfig } from "@/config/site";
+import { english } from "@/i18n/en";
 
 export default function manifest(): MetadataRoute.Manifest {
   return {
-    name: "Eren Kaçar — Software Engineer",
+    name: english.metadata.homeTitle,
     short_name: siteConfig.name,
     description: siteConfig.description,
     start_url: "/",

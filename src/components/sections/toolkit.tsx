@@ -1,35 +1,38 @@
+import type { DictionaryProps } from "@/i18n/schema";
 import { Container } from "@/components/ui/container";
 import {
   InterfaceIcon,
   type InterfaceIconName,
 } from "@/components/ui/interface-icon";
 import { SectionHeader } from "@/components/ui/section-header";
-import { toolkit } from "@/data/toolkit";
 
-const toolkitIcons: Record<string, InterfaceIconName> = {
-  Languages: "code",
-  Frontend: "layers",
-  "Backend and data": "database",
-  "Desktop and systems": "desktop",
-  "Audio and automation": "waveform",
+const toolkitIcons: Record<DictionaryProps["dictionary"]["content"]["toolkit"][number]["id"], InterfaceIconName> = {
+  languages: "code",
+  frontend: "layers",
+  "backend-data": "database",
+  "desktop-systems": "desktop",
+  "audio-automation": "waveform",
 };
 
-export function Toolkit() {
+export function Toolkit({ dictionary }: DictionaryProps) {
+  const copy = dictionary.home.toolkit;
+  const { toolkit } = dictionary.content;
+
   return (
     <section className="section" id="skills" aria-labelledby="toolkit-title">
       <Container>
         <div id="toolkit-title">
           <SectionHeader
-            eyebrow="04 / Technical toolkit"
-            title="Tools chosen to move a product forward."
-            intro="Technologies used across interface, backend, desktop, audio and automation work."
+            eyebrow={copy.eyebrow}
+            title={copy.title}
+            intro={copy.intro}
           />
         </div>
         <div className="toolkit-grid">
           {toolkit.map((group) => (
-            <section className="toolkit-group" key={group.title}>
+            <section className="toolkit-group" key={group.id}>
               <h3>
-                <InterfaceIcon name={toolkitIcons[group.title] ?? "code"} />
+                <InterfaceIcon name={toolkitIcons[group.id]} />
                 {group.title}
               </h3>
               <ul>

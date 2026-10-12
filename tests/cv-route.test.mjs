@@ -1,3 +1,4 @@
+import { loadSource, renderSource } from "./helpers/load-source.mjs";
 import assert from "node:assert/strict";
 import { existsSync, readFileSync } from "node:fs";
 import test from "node:test";
@@ -44,23 +45,24 @@ test("the configured résumé is a valid PDF and download actions stay unchanged
   for (const source of [hero, contact]) {
     assert.match(source, /href=\{siteConfig\.resumePath\}/);
     assert.match(source, /\bdownload\b/);
-    assert.match(source, />\s*Download CV\s*</);
+    assert.match(renderSource(source === hero ? "src/components/sections/hero.tsx" : "src/components/sections/contact.tsx", source === hero ? "Hero" : "Contact"), />\s*Download CV\s*</);
     assert.doesNotMatch(source, /href=["'](?:#|\/cv)["']/);
   }
 });
 
-test("/cv remains outside the four-route HTML sitemap", () => {
+test("/cv remains outside the eight-route bilingual HTML sitemap", () => {
   const sitemap = read("src/app/sitemap.ts");
-  const routeList =
-    sitemap.match(/const routes = \[(?<routes>[\s\S]*?)\] as const/)?.groups
-      ?.routes ?? "";
-  const routes = [...routeList.matchAll(/"([^"]+)"/g)].map((match) => match[1]);
+  const routes = loadSource("src/app/sitemap.ts").default().map((entry) => new URL(entry.url).pathname).sort();
 
   assert.deepEqual(routes, [
     "/",
     "/projects/guitarsense",
     "/projects/nexora",
     "/projects/grade-watcher",
-  ]);
+    "/tr",
+    "/tr/projects/guitarsense",
+    "/tr/projects/nexora",
+    "/tr/projects/grade-watcher",
+  ].sort());
   assert.doesNotMatch(sitemap, /["']\/cv["']/);
 });

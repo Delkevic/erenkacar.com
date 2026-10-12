@@ -1,12 +1,15 @@
+import { labelWithName } from "@/i18n/format";
+import type { DictionaryProps } from "@/i18n/schema";
 import Link from "next/link";
 import { Container } from "@/components/ui/container";
 import { InterfaceIcon } from "@/components/ui/interface-icon";
 import { ScreenshotFigure } from "@/components/ui/screenshot-figure";
 import { SectionHeader } from "@/components/ui/section-header";
-import { guitarSenseImages } from "@/data/guitarsense-images";
-import { featuredProject } from "@/data/projects";
 
-export function FeaturedProject() {
+export function FeaturedProject({ dictionary }: DictionaryProps) {
+  const copy = dictionary.home.featured;
+  const { guitarSenseImages, featuredProject } = dictionary.content;
+
   return (
     <section
       className="section section--bordered"
@@ -15,9 +18,9 @@ export function FeaturedProject() {
     >
       <Container>
         <SectionHeader
-          eyebrow="01 / Featured project"
-          title="Engineering the full product, not just one layer."
-          intro="A desktop product spanning interface design, audio processing, practice tools, performance and packaging."
+          eyebrow={copy.eyebrow}
+          title={copy.title}
+          intro={copy.intro}
         />
         <article className="project-feature">
           <ScreenshotFigure
@@ -38,7 +41,7 @@ export function FeaturedProject() {
               <p className="project-summary">{featuredProject.summary}</p>
               <ul
                 className="proof-list"
-                aria-label={`${featuredProject.name} proof points`}
+                aria-label={labelWithName(dictionary.shared.proofPoints, featuredProject.name)}
               >
                 {featuredProject.proofPoints.map((proofPoint) => (
                   <li key={proofPoint}>{proofPoint}</li>
@@ -46,7 +49,7 @@ export function FeaturedProject() {
               </ul>
               <ul
                 className="tag-list"
-                aria-label={`${featuredProject.name} technologies`}
+                aria-label={labelWithName(dictionary.shared.technologies, featuredProject.name)}
               >
                 {featuredProject.tags.map((tag) => (
                   <li className="tag" key={tag}>
@@ -57,7 +60,7 @@ export function FeaturedProject() {
             </div>
             {featuredProject.href ? (
               <Link className="text-link" href={featuredProject.href}>
-                Read the case study
+                {dictionary.shared.readCaseStudy}
                 <span aria-hidden="true">→</span>
               </Link>
             ) : null}

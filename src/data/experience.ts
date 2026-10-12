@@ -1,6 +1,6 @@
 import type { ExperienceEntry } from "@/types/content";
 
-export const experience: ExperienceEntry[] = [
+export const experience = [
   {
     organization: "Trakya University Student Affairs",
     role: "Software Developer",
@@ -38,4 +38,4 @@ export const experience: ExperienceEntry[] = [
       "Technical Documentation",
     ],
   },
-];
+] as const satisfies readonly ExperienceEntry[];

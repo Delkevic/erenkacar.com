@@ -1,3 +1,4 @@
+import { loadSource, renderSource } from "./helpers/load-source.mjs";
 import assert from "node:assert/strict";
 import { existsSync, readFileSync } from "node:fs";
 import test from "node:test";
@@ -34,10 +35,10 @@ test("hero, contact, and footer expose centralized real profile actions", () => 
   assert.match(hero, /siteConfig\.githubUrl/);
   assert.match(hero, /siteConfig\.linkedinUrl/);
   assert.match(hero, /siteConfig\.resumePath/);
-  assert.match(hero, />\s*Download CV\s*</);
-  assert.match(contact, />\s*Download CV\s*</);
+  assert.match(renderSource("src/components/sections/hero.tsx", "Hero"), />\s*Download CV\s*</);
+  assert.match(renderSource("src/components/sections/contact.tsx", "Contact"), />\s*Download CV\s*</);
   assert.match(
-    publicActions,
+    renderSource("src/components/sections/hero.tsx", "Hero"),
     /aria-label="Download Eren Kaçar’s CV as PDF"/,
   );
   assert.doesNotMatch(publicActions, /Download résumé/);
@@ -62,12 +63,12 @@ test("hero, contact, and footer expose centralized real profile actions", () => 
   }
   assert.match(
     contactMailAnchors.find((anchor) => anchor.includes("siteConfig.email")) ?? "",
-    /aria-label="Email Eren Kaçar"/,
+    /aria-label=\{copy.emailLabel\}/,
   );
   assert.match(contact, /siteConfig\.email/);
   assert.match(footer, /siteConfig\.githubUrl/);
   assert.match(footer, /siteConfig\.linkedinUrl/);
-  assert.match(footer, /<a href=\{siteConfig\.contactUrl\}>Email<\/a>/);
+  assert.match(footer, /<a href=\{siteConfig\.contactUrl\}>\{copy.email\}<\/a>/);
   assert.match(externalLink, /target="_blank"/);
   assert.match(externalLink, /rel="noreferrer"/);
   assert.doesNotMatch(publicActions, /href=["']#["']/);
@@ -99,25 +100,25 @@ test("Grade Watcher is a real homepage project with an accessible flow", () => {
   assert.match(projects, /Result change detection/);
   assert.match(projects, /Duplicate-safe notifications/);
   assert.match(projectCard, /AutomationFlow/);
-  assert.match(projectCard, /View project/);
+  assert.match(renderSource("src/components/views/home.tsx", "HomeView"), /View project/);
   assert.match(flow, /<ol/);
   assert.match(flow, /aria-hidden="true"/);
   assert.doesNotMatch(flow, /terminal|console|command/i);
 });
 
 test("the Grade Watcher route presents the verified private automation design", () => {
-  const routePath = "src/app/projects/grade-watcher/page.tsx";
+  const routePath = "src/components/views/grade-watcher.tsx";
   const dataPath = "src/data/grade-watcher.ts";
 
-  assert.ok(existsSync(routePath), "Grade Watcher route should exist");
+  assert.ok(existsSync("src/app/(en)/projects/grade-watcher/page.tsx"), "Grade Watcher route should exist");
   assert.ok(existsSync(dataPath), "Grade Watcher case-study data should exist");
 
   const page = read(routePath);
   const data = read(dataPath);
   const source = `${page}\n${data}`;
 
-  assert.match(page, /Grade Watcher — Eren Kaçar/);
-  assert.match(page, /\/projects\/grade-watcher/);
+  assert.equal(loadSource("src/app/(en)/projects/grade-watcher/page.tsx").metadata.openGraph.title, "Grade Watcher — Eren Kaçar");
+  assert.equal(loadSource("src/app/(en)/projects/grade-watcher/page.tsx").metadata.alternates.canonical, "https://www.erenkacar.com/projects/grade-watcher");
   assert.match(page, /AutomationFlow/);
   assert.doesNotMatch(page, /images:\s*\[/);
   for (const heading of [
@@ -127,7 +128,7 @@ test("the Grade Watcher route presents the verified private automation design", 
     "Engineering decisions",
     "Current status",
   ]) {
-    assert.match(page, new RegExp(`>${heading}<`));
+    assert.match(renderSource(routePath, "GradeWatcherView"), new RegExp(`>${heading}<`));
   }
   for (const stage of [
     "Local runner",
@@ -145,7 +146,7 @@ test("the Grade Watcher route presents the verified private automation design", 
 
 test("Practice Summary is fully removed without losing practice feedback copy", () => {
   const registry = read("src/data/guitarsense-images.ts");
-  const page = read("src/app/projects/guitarsense/page.tsx");
+  const page = read("src/components/views/guitarsense.tsx");
   const content = read("src/data/case-study.ts");
   const readme = read("README.md");
 
@@ -160,7 +161,7 @@ test("Practice Summary is fully removed without losing practice feedback copy", 
 
 test("the sprint adds no client boundary or dependency", () => {
   const files = [
-    "src/app/projects/grade-watcher/page.tsx",
+    "src/components/views/grade-watcher.tsx",
     "src/components/ui/automation-flow.tsx",
     "src/components/ui/external-link.tsx",
     "src/components/sections/hero.tsx",

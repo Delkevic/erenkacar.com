@@ -1,12 +1,17 @@
+import type { DictionaryProps } from "@/i18n/schema";
+import type { PageId } from "@/i18n/routes";
 import Link from "next/link";
 import { siteConfig } from "@/config/site";
 import { Container } from "@/components/ui/container";
+import { LanguageSwitcher } from "@/components/layout/language-switcher";
 
-export function SiteHeader() {
+export function SiteHeader({ dictionary, page }: DictionaryProps & { page: PageId }) {
+  const copy = dictionary.shared;
+
   return (
     <header className="site-header">
       <Container className="site-header__inner">
-        <Link className="brand" href="/" aria-label="Eren Kaçar, home">
+        <Link className="brand" href={dictionary.links.home} aria-label={copy.homeLabel}>
           <span className="brand__mark" aria-hidden="true">
             <svg
               aria-hidden="true"
@@ -18,11 +23,12 @@ export function SiteHeader() {
             </svg>
             <span>EK</span>
           </span>
-          <span>Eren Kaçar</span>
+          <span>{siteConfig.name}</span>
         </Link>
-        <nav className="site-nav" aria-label="Primary navigation">
+        <LanguageSwitcher dictionary={dictionary} page={page} />
+        <nav className="site-nav" aria-label={copy.primaryNavigation}>
           <ul>
-            {siteConfig.navigation.map((item) => (
+            {copy.navigation.map((item) => (
               <li key={item.href}>
                 <Link href={item.href}>{item.label}</Link>
               </li>

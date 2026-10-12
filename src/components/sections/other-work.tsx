@@ -1,13 +1,17 @@
+import { labelWithName } from "@/i18n/format";
+import type { DictionaryProps } from "@/i18n/schema";
 import { Container } from "@/components/ui/container";
-import { otherWork } from "@/data/projects";
 
-export function OtherWork() {
+export function OtherWork({ dictionary }: DictionaryProps) {
+  const copy = dictionary.home.otherWork;
+  const { otherWork } = dictionary.content;
+
   return (
     <section className="section" aria-labelledby="other-work-title">
       <Container>
         <header className="other-work__header">
-          <p className="eyebrow">Additional projects</p>
-          <h2 id="other-work-title">Other work</h2>
+          <p className="eyebrow">{copy.eyebrow}</p>
+          <h2 id="other-work-title">{copy.title}</h2>
         </header>
         <div className="other-work-grid">
           {otherWork.map((project) => (
@@ -16,7 +20,7 @@ export function OtherWork() {
               <p>{project.summary}</p>
               <ul
                 className="tag-list"
-                aria-label={`${project.name} technologies`}
+                aria-label={labelWithName(dictionary.shared.technologies, project.name)}
               >
                 {project.tags.map((tag) => (
                   <li className="tag" key={tag}>

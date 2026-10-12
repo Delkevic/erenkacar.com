@@ -30,7 +30,7 @@ export const guitarSenseCaseStudy = {
       description:
         "A packaged Windows application integrating multiple software components into a consistent user experience.",
     },
-  ] satisfies CaseStudyFeature[],
+  ] as const satisfies readonly CaseStudyFeature[],
   highlights: [
     {
       title: "Real-time audio performance",
@@ -54,7 +54,7 @@ export const guitarSenseCaseStudy = {
       body:
         "Prepared and validated a distributable Windows beta with attention to application reliability.",
     },
-  ] satisfies CaseStudyChallenge[],
+  ] as const satisfies readonly CaseStudyChallenge[],
   technologies: [
     "Electron",
     "React",

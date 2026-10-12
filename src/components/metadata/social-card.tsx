@@ -1,5 +1,7 @@
 import { ImageResponse } from "next/og";
 import { siteConfig } from "@/config/site";
+import type { Dictionary } from "@/i18n/schema";
+import type { Locale } from "@/i18n/routes";
 
 export const socialImageSize = {
   width: 1200,
@@ -7,6 +9,8 @@ export const socialImageSize = {
 };
 
 type SocialCardOptions = {
+  locale?: Locale;
+  copy: Dictionary["social"];
   title: string;
   label: string;
   accent?: string;
@@ -14,10 +18,12 @@ type SocialCardOptions = {
 };
 
 export function createSocialImage({
+  locale = "en",
+  copy,
   title,
   label,
   accent = "#70b6ab",
-  supportingLine = "Desktop · Web · Real-time systems",
+  supportingLine = copy.supportingLine,
 }: SocialCardOptions) {
   return new ImageResponse(
     (
@@ -92,10 +98,10 @@ export function createSocialImage({
               fontSize: 22,
               fontWeight: 700,
               letterSpacing: "0.12em",
-              textTransform: "uppercase",
+              textTransform: locale === "tr" ? "none" : "uppercase",
             }}
           >
-            Eren Kaçar · Portfolio
+            {locale === "tr" ? copy.brand.toLocaleUpperCase("tr-TR") : copy.brand}
           </div>
         </div>
 
@@ -118,10 +124,10 @@ export function createSocialImage({
               fontSize: label.length > 32 ? 21 : 24,
               fontWeight: 700,
               letterSpacing: "0.12em",
-              textTransform: "uppercase",
+              textTransform: locale === "tr" ? "none" : "uppercase",
             }}
           >
-            {label}
+            {locale === "tr" ? label.toLocaleUpperCase("tr-TR") : label}
           </div>
           <div
             style={{
@@ -160,7 +166,7 @@ export function createSocialImage({
           }}
         >
           <span>{siteConfig.displayDomain}</span>
-          <span>Desktop · Web · Real-time systems</span>
+          <span>{copy.supportingLine}</span>
         </div>
       </div>
     ),

@@ -1,8 +1,9 @@
 import type { OtherWorkItem, Project } from "@/types/content";
 import { nexoraImages } from "@/data/nexora-images";
 
-export const projects: Project[] = [
+export const projects = [
   {
+    id: "guitarsense",
     name: "GuitarSense",
     eyebrow: "Flagship project",
     summary:
@@ -17,6 +18,7 @@ export const projects: Project[] = [
     featured: true,
   },
   {
+    id: "nexora",
     name: "Nexora",
     eyebrow: "Full-stack social platform",
     summary:
@@ -32,6 +34,7 @@ export const projects: Project[] = [
     image: nexoraImages.homeFeed,
   },
   {
+    id: "grade-watcher",
     name: "Grade Watcher",
     eyebrow: "Browser automation",
     summary:
@@ -46,12 +49,12 @@ export const projects: Project[] = [
     featured: false,
     visual: "automation-flow",
   },
-];
+] as const satisfies readonly Project[];
 
-export const featuredProject = projects.find((project) => project.featured)!;
-export const selectedProjects = projects.filter((project) => !project.featured);
+export const featuredProject = projects[0];
+export const selectedProjects = [projects[1], projects[2]] as const;
 
-export const otherWork: OtherWorkItem[] = [
+export const otherWork = [
   {
     name: "Medipan Medical Center",
     summary: "A responsive corporate website created for a local medical center.",
@@ -69,4 +72,4 @@ export const otherWork: OtherWorkItem[] = [
       "An Android prototype that evaluates microphone-level windows and resets monitoring behavior after device unlock events.",
     tags: ["Kotlin", "Android", "Audio Monitoring"],
   },
-];
+] as const satisfies readonly OtherWorkItem[];

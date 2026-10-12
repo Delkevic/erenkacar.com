@@ -64,9 +64,9 @@ test("decorative illustrations are static, hidden from assistive technology, and
 
 test("decorative illustrations remain locally contained on the homepage", () => {
   const projectPages = [
-    "src/app/projects/guitarsense/page.tsx",
-    "src/app/projects/nexora/page.tsx",
-    "src/app/projects/grade-watcher/page.tsx",
+    "src/components/views/guitarsense.tsx",
+    "src/components/views/nexora.tsx",
+    "src/components/views/grade-watcher.tsx",
   ].map(read).join("\n");
   const styles = read("src/app/globals.css");
 

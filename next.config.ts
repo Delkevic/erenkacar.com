@@ -2,6 +2,9 @@ import type { NextConfig } from "next";
 import { siteConfig } from "./src/config/site";
 
 const nextConfig: NextConfig = {
+  experimental: {
+    globalNotFound: true,
+  },
   headers() {
     return [
       {
