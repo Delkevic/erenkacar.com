@@ -4,7 +4,7 @@ export type GuitarSenseImage = {
   height: number;
   alt: string;
   caption: string | null;
-  placement: "homepage" | "case-primary" | "walkthrough" | "challenge";
+  placement: "homepage" | "case-primary" | "capabilities";
   frame: "contain" | "natural" | "taskbar-crop";
   replaceBeforeLaunch: boolean;
 };
@@ -14,7 +14,7 @@ export const guitarSenseImages = {
     src: "/images/projects/guitarsense/library.png",
     width: 1876,
     height: 952,
-    alt: "GuitarSense project library showing saved practice projects and readiness states",
+    alt: "GuitarSense Library showing saved practice projects",
     caption: null,
     placement: "homepage",
     frame: "contain",
@@ -34,32 +34,9 @@ export const guitarSenseImages = {
     src: "/images/projects/guitarsense/preset-editor.png",
     width: 935,
     height: 904,
-    alt: "GuitarSense preset editor with output level and guitar effects chain controls",
-    caption:
-      "Custom preset creation with output control and an editable effects chain.",
-    placement: "walkthrough",
-    frame: "natural",
-    replaceBeforeLaunch: false,
-  },
-  importWorkflow: {
-    src: "/images/projects/guitarsense/import-workflow.png",
-    width: 1478,
-    height: 948,
-    alt: "GuitarSense import screen showing local, YouTube and AI-assisted import options",
-    caption:
-      "Local and YouTube-oriented import workflows with separate core, live-audio and AI runtime states.",
-    placement: "walkthrough",
-    frame: "natural",
-    replaceBeforeLaunch: false,
-  },
-  audioSettings: {
-    src: "/images/projects/guitarsense/audio-settings.png",
-    width: 673,
-    height: 454,
-    alt: "GuitarSense advanced audio settings with backend, device and buffer-size controls",
-    caption:
-      "Audio backend, device, buffer-size and synchronization controls used during backend testing.",
-    placement: "challenge",
+    alt: "GuitarSense Preset Editor with guitar tone and effects controls",
+    caption: "Guitar tone and effects controls.",
+    placement: "capabilities",
     frame: "natural",
     replaceBeforeLaunch: false,
   },

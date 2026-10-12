@@ -152,8 +152,8 @@ test("Practice Summary is fully removed without losing practice feedback copy", 
   assert.doesNotMatch(registry, /practiceSummary|practice-summary\.png/i);
   assert.doesNotMatch(page, /practiceSummary|practice-summary\.png/i);
   assert.doesNotMatch(readme, /Practice Summary/i);
-  assert.match(content, /title:\s*"Practice feedback"/);
-  assert.match(content, /accuracy, score and streak tracking/);
+  assert.match(content, /title:\s*"Interactive practice"/);
+  assert.match(content, /Tablature-based practice tools with real-time feedback/);
   assert.doesNotMatch(registry, /replaceBeforeLaunch:\s*true/);
   assert.equal(existsSync("public/images/projects/guitarsense/practice-summary.png"), false);
 });

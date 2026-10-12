@@ -17,7 +17,7 @@ export function FeaturedProject() {
         <SectionHeader
           eyebrow="01 / Featured project"
           title="Engineering the full product, not just one layer."
-          intro="A desktop product spanning interface design, audio processing, practice tooling, packaging and runtime safety."
+          intro="A desktop product spanning interface design, audio processing, practice tools, performance and packaging."
         />
         <article className="project-feature">
           <ScreenshotFigure

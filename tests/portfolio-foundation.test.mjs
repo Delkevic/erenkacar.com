@@ -99,7 +99,7 @@ test("reviewed project data describes GuitarSense, Nexora, and Grade Watcher", (
   const projects = read("src/data/projects.ts");
 
   assert.match(projects, /name:\s*"GuitarSense"/);
-  assert.match(projects, /A desktop guitar practice platform combining/);
+  assert.match(projects, /A desktop guitar practice application combining/);
   assert.match(projects, /TÜBİTAK 2209-A supported/);
   assert.match(projects, /name:\s*"Nexora"/);
   assert.match(projects, /secure account flows, Firebase realtime messaging/);
@@ -127,16 +127,15 @@ test("reviewed experience keeps Bimser Synergy central and dates factual", () =>
   assert.match(experience, /date:\s*null/);
 });
 
-test("the GuitarSense case study qualifies latency and exposes its architecture", () => {
+test("the GuitarSense case study qualifies latency and preserves engineering evidence", () => {
   const page = read("src/app/projects/guitarsense/page.tsx");
   const content = read("src/data/case-study.ts");
 
   assert.match(page, /guitarSenseImages\.practiceView/);
-  assert.match(content, /not laboratory-measured end-to-end round-trip latency/);
-  assert.match(content, /React Renderer/);
-  assert.match(content, /Electron Main Process/);
-  assert.match(content, /Python Audio Engine/);
-  assert.match(content, /Packaged Windows beta produced/);
+  assert.match(content, /not independently measured end-to-end round-trip latency/);
+  assert.match(content, /Electron-based interface with a Python audio-processing backend/);
+  assert.match(content, /Packaged Windows beta/);
+  assert.doesNotMatch(page, /ArchitectureFlow/);
 });
 
 test("public content no longer exposes provisional template wording", () => {
@@ -183,7 +182,7 @@ test("the GuitarSense image registry references real accessible screenshot asset
     (match) => match.groups?.alt,
   );
 
-  assert.equal(sources.length, 5);
+  assert.equal(sources.length, 3);
   assert.equal(altTexts.length, sources.length);
 
   for (const source of sources) {
@@ -233,8 +232,6 @@ test("GuitarSense screenshot mappings and launch readiness stay explicit", () =>
   for (const image of [
     "practiceView",
     "presetEditor",
-    "audioSettings",
-    "importWorkflow",
   ]) {
     assert.match(caseStudy, new RegExp(`guitarSenseImages\\.${image}`));
   }
@@ -242,20 +239,13 @@ test("GuitarSense screenshot mappings and launch readiness stay explicit", () =>
     "library",
     "practiceView",
     "presetEditor",
-    "audioSettings",
-    "importWorkflow",
   ]) {
     assert.match(
       registryEntry(registry, image),
       /replaceBeforeLaunch:\s*false/,
     );
   }
-  for (const image of ["presetEditor", "importWorkflow"]) {
-    assert.match(
-      registryEntry(registry, image),
-      /placement: "walkthrough"/,
-    );
-  }
+  assert.match(registryEntry(registry, "presetEditor"), /placement: "capabilities"/);
   assert.doesNotMatch(registry, /replaceBeforeLaunch:\s*true/);
   assert.doesNotMatch(
     [registry, caseStudy].join("\n"),
@@ -270,14 +260,11 @@ test("GuitarSense screenshot mappings and launch readiness stay explicit", () =>
 test("the GuitarSense case study keeps its reviewed section order", () => {
   const page = read("src/app/projects/guitarsense/page.tsx");
   const headings = [
-    "My role",
     "Overview",
-    "The problem",
-    "The solution",
-    "Key features",
-    "Product walkthrough",
-    "Architecture",
-    "Engineering challenges",
+    "My role",
+    "Core capabilities",
+    "Engineering highlights",
+    "Technologies",
     "Results",
   ];
   let previousIndex = -1;
@@ -289,73 +276,54 @@ test("the GuitarSense case study keeps its reviewed section order", () => {
   }
 });
 
-test("Key features stays a screenshot-free presentation of all six feature groups", () => {
+test("Core capabilities presents only three high-level groups with the preset screenshot", () => {
   const page = read("src/app/projects/guitarsense/page.tsx");
   const content = read("src/data/case-study.ts");
-  const keyFeatures = sectionBetween(page, "Key features", "Product walkthrough");
+  const capabilities = sectionBetween(page, "Core capabilities", "Engineering highlights");
 
   for (const title of [
     "Real-time guitar audio",
-    "Tablature workspace",
-    "Practice feedback",
-    "Media importing",
-    "Desktop packaging",
-    "Safety and recovery",
+    "Interactive practice",
+    "Desktop application",
   ]) {
     assert.match(content, new RegExp(`title: "${title}"`));
   }
 
-  assert.doesNotMatch(keyFeatures, /ScreenshotFigure|guitarSenseImages\./);
+  assert.match(capabilities, /guitarSenseImages\.presetEditor/);
+  assert.match(capabilities, /guitarSenseCaseStudy\.capabilities\.map/);
 });
 
-test("Product walkthrough owns only its two useful supporting screenshots", () => {
+test("GuitarSense retains only the approved case-study screenshots", () => {
   const page = read("src/app/projects/guitarsense/page.tsx");
-  const walkthrough = sectionBetween(
-    page,
-    "Product walkthrough",
-    "Architecture",
-  );
 
-  for (const image of ["presetEditor", "importWorkflow"]) {
-    assert.match(walkthrough, new RegExp(`guitarSenseImages\\.${image}`));
+  for (const image of ["practiceView", "presetEditor"]) {
+    assert.equal(page.match(new RegExp(`guitarSenseImages\\.${image}`, "g"))?.length, 1);
   }
-
-  assert.equal(walkthrough.match(/<ProductWalkthroughRow/g)?.length, 2);
-  assert.doesNotMatch(walkthrough, /practiceSummary|Practice Summary/i);
-  assert.equal(page.match(/guitarSenseImages\.importWorkflow/g)?.length, 1);
+  assert.doesNotMatch(page, /importWorkflow|audioSettings|practiceSummary|Practice Summary/i);
 });
 
-test("Engineering challenges keeps a regular card grid with separate audio evidence", () => {
+test("Engineering highlights keeps a regular card grid and visible latency qualification", () => {
   const page = read("src/app/projects/guitarsense/page.tsx");
-  const challenges = sectionBetween(page, "Engineering challenges", "Results");
+  const highlights = sectionBetween(page, "Engineering highlights", "Technologies");
 
-  assert.match(challenges, /challenge-grid/);
-  assert.match(challenges, /guitarSenseImages\.audioSettings/);
-  assert.match(challenges, /Test configuration interface/);
-  assert.doesNotMatch(challenges, /guitarSenseImages\.importWorkflow/);
+  assert.match(highlights, /challenge-grid/);
+  assert.match(highlights, /challenge-card__qualification/);
+  assert.doesNotMatch(highlights, /guitarSenseImages\./);
 });
 
 test("GuitarSense screenshot alt text remains descriptive and reviewed", () => {
   const registry = read("src/data/guitarsense-images.ts");
   const altTexts = [
-    "GuitarSense project library showing saved practice projects and readiness states",
+    "GuitarSense Library showing saved practice projects",
     "GuitarSense Practice View with tablature, playback controls and practice feedback",
-    "GuitarSense preset editor with output level and guitar effects chain controls",
-    "GuitarSense import screen showing local, YouTube and AI-assisted import options",
-    "GuitarSense advanced audio settings with backend, device and buffer-size controls",
+    "GuitarSense Preset Editor with guitar tone and effects controls",
   ];
 
   for (const altText of altTexts) {
     assert.match(registry, new RegExp(`alt: "${altText}"`));
   }
 
-  for (const caption of [
-    "Custom preset creation with output control and an editable effects chain.",
-    "Local and YouTube-oriented import workflows with separate core, live-audio and AI runtime states.",
-    "Audio backend, device, buffer-size and synchronization controls used during backend testing.",
-  ]) {
-    assert.match(registry, new RegExp(caption.replaceAll(".", "\\.")));
-  }
+  assert.match(registry, /caption:\s*"Guitar tone and effects controls\."/);
 });
 
 test("rendered GuitarSense media uses Next Image without old placeholders", () => {

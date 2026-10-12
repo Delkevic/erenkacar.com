@@ -6,12 +6,12 @@ export const projects: Project[] = [
     name: "GuitarSense",
     eyebrow: "Flagship project",
     summary:
-      "A desktop guitar practice platform combining real-time audio processing, tablature playback, pitch-aware practice feedback, media importing and a distributable Windows runtime.",
+      "A desktop guitar practice application combining real-time audio processing, guitar effects and interactive practice tools.",
     tags: ["Electron", "React", "TypeScript", "Python", "ZMQ", "PortAudio"],
     proofPoints: [
       "TÜBİTAK 2209-A supported",
       "Packaged Windows beta",
-      "Real-time audio and practice engine",
+      "Real-time audio processing",
     ],
     href: "/projects/guitarsense",
     featured: true,
