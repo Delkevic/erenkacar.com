@@ -1,4 +1,5 @@
 import type { DictionaryProps } from "@/i18n/schema";
+import { Analytics } from "@vercel/analytics/next";
 
 type DocumentShellProps = DictionaryProps & { children: React.ReactNode };
 
@@ -10,6 +11,7 @@ export function DocumentShell({ dictionary, children }: DocumentShellProps) {
           {dictionary.shared.skipLink}
         </a>
         {children}
+        <Analytics />
       </body>
     </html>
   );

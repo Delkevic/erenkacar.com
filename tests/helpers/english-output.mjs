@@ -27,6 +27,8 @@ export function inspectHtml(html) {
     jsonLd: [...html.matchAll(/<script type="application\/ld\+json">([\s\S]*?)<\/script>/g)]
       .map(([, data]) => JSON.parse(data)),
     body: body.replace(/<script\b[^>]*>[\s\S]*?<\/script>/g, "")
+      // Analytics' null Suspense fallback adds an inert React marker, not UI.
+      .replace(/<template data-dgst="BAILOUT_TO_CLIENT_SIDE_RENDERING"><\/template>/g, "")
       .replace(/<!--[^]*?-->/g, ""),
   };
 }
